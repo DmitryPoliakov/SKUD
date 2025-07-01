@@ -18,7 +18,12 @@ OneWire ds(ONE_WIRE_PIN);
 // Светодиоды
 #define GREEN_LED_PIN 25  // Пин зеленого светодиода
 #define RED_LED_PIN 26    // Пин красного светодиода
-#define LED_BLINK_DURATION 500 // Длительность мигания светодиода в мс
+
+// Константы для плавного мерцания
+#define FADE_STEPS 50     // Количество шагов для плавного изменения яркости
+#define FADE_DELAY_SLOW 15  // Задержка для медленного мерцания (мс)
+#define FADE_DELAY_MEDIUM 8 // Задержка для среднего мерцания (мс)
+#define FADE_DELAY_FAST 3   // Задержка для быстрого мерцания (мс)
 
 // NTP настройки
 const char* ntpServer = "pool.ntp.org";
@@ -32,19 +37,18 @@ void setup() {
   pinMode(GREEN_LED_PIN, OUTPUT);
   pinMode(RED_LED_PIN, OUTPUT);
   
-  // Тестовое мигание светодиодов при запуске
-  blinkLED(GREEN_LED_PIN, 2);
-  blinkLED(RED_LED_PIN, 2);
+  // Приветственная индикация при запуске
+  fadeInOut(GREEN_LED_PIN, 2, FADE_DELAY_MEDIUM);
   
   // Подключение к Wi-Fi
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
-    delay(1000);
+    delay(500);
     Serial.println("Connecting to WiFi...");
-    blinkLED(RED_LED_PIN, 1); // Мигаем красным при подключении
+    pulseLED(RED_LED_PIN, 1, FADE_DELAY_MEDIUM);
   }
   Serial.println("Connected to WiFi");
-  blinkLED(GREEN_LED_PIN, 3); // Мигаем зеленым при успешном подключении
+  fadeInOut(GREEN_LED_PIN, 2, FADE_DELAY_FAST);
 
   // Настройка времени
   configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
@@ -54,7 +58,7 @@ void setup() {
 void loop() {
   byte addr[8];
   if (ds.search(addr)) {
-    // Успешное считывание ключа
+    // Успешное считывание ключа - короткая вспышка зеленого
     digitalWrite(GREEN_LED_PIN, HIGH);
     
     String serial = "";
@@ -69,7 +73,7 @@ void loop() {
     struct tm timeinfo;
     if (!getLocalTime(&timeinfo)) {
       Serial.println("Failed to obtain time");
-      blinkLED(RED_LED_PIN, 2); // Ошибка получения времени
+      fadeInOut(RED_LED_PIN, 3, FADE_DELAY_FAST); // Быстрое мерцание красным - ошибка
       digitalWrite(GREEN_LED_PIN, LOW);
       return;
     }
@@ -101,35 +105,25 @@ void loop() {
           Serial.println("Событие: " + event);
           Serial.println("Время: " + time);
           
-          // Визуальная индикация типа события
-          if (event == "приход") {
-            // Приход - два быстрых мигания зеленым
-            blinkLED(GREEN_LED_PIN, 2, 200);
-          } else if (event == "уход") {
-            // Уход - три быстрых мигания зеленым
-            blinkLED(GREEN_LED_PIN, 3, 200);
-          }
+          // Успешная операция - медленное плавное мерцание зеленым
+          fadeInOut(GREEN_LED_PIN, 2, FADE_DELAY_SLOW);
+          
         } else if (status == "ignored") {
-          // Игнорированное событие - попеременное мигание красным и зеленым
-          for (int i = 0; i < 2; i++) {
-            digitalWrite(RED_LED_PIN, HIGH);
-            delay(200);
-            digitalWrite(RED_LED_PIN, LOW);
-            digitalWrite(GREEN_LED_PIN, HIGH);
-            delay(200);
-            digitalWrite(GREEN_LED_PIN, LOW);
-          }
+          // Предупреждение - чередование красного и зеленого (среднее мерцание)
+          alternatingFade(GREEN_LED_PIN, RED_LED_PIN, 2, FADE_DELAY_MEDIUM);
+          
         } else if (status == "unknown") {
-          // Неизвестный ключ - быстрое мигание красным
-          blinkLED(RED_LED_PIN, 5, 100);
+          // Ошибка - быстрое мерцание красным
+          fadeInOut(RED_LED_PIN, 3, FADE_DELAY_FAST);
         }
       } else {
         Serial.println("Ошибка парсинга JSON");
-        blinkLED(RED_LED_PIN, 3);
+        // Критическая ошибка - быстрое мерцание красным
+        fadeInOut(RED_LED_PIN, 3, FADE_DELAY_FAST);
       }
     } else {
-      // Ошибка отправки
-      blinkLED(RED_LED_PIN, 3);
+      // Ошибка отправки - быстрое мерцание красным
+      fadeInOut(RED_LED_PIN, 3, FADE_DELAY_FAST);
     }
     
     ds.reset_search();
@@ -164,23 +158,80 @@ String sendToGoogleSheets(String serial, String time) {
     http.end();
   } else {
     Serial.println("WiFi disconnected");
-    blinkLED(RED_LED_PIN, 5); // Ошибка WiFi
+    // Ошибка WiFi - быстрое мерцание красным
+    fadeInOut(RED_LED_PIN, 3, FADE_DELAY_FAST);
   }
   
   return response;
 }
 
 /**
- * Мигает светодиодом указанное количество раз
+ * Плавное включение и выключение светодиода
  * @param pin - Пин светодиода
- * @param times - Количество миганий
- * @param duration - Длительность мигания (опционально)
+ * @param cycles - Количество циклов мерцания
+ * @param delayTime - Задержка между шагами (определяет скорость мерцания)
  */
-void blinkLED(int pin, int times, int duration = LED_BLINK_DURATION) {
-  for (int i = 0; i < times; i++) {
-    digitalWrite(pin, HIGH);
-    delay(duration);
-    digitalWrite(pin, LOW);
-    delay(duration);
+void fadeInOut(int pin, int cycles, int delayTime) {
+  for (int j = 0; j < cycles; j++) {
+    // Нарастание яркости
+    for (int i = 0; i <= FADE_STEPS; i++) {
+      analogWrite(pin, i * (255 / FADE_STEPS));
+      delay(delayTime);
+    }
+    
+    // Убывание яркости
+    for (int i = FADE_STEPS; i >= 0; i--) {
+      analogWrite(pin, i * (255 / FADE_STEPS));
+      delay(delayTime);
+    }
   }
+  digitalWrite(pin, LOW);
+}
+
+/**
+ * Пульсация светодиода (быстрое включение, медленное затухание)
+ * @param pin - Пин светодиода
+ * @param cycles - Количество циклов пульсации
+ * @param delayTime - Задержка между шагами
+ */
+void pulseLED(int pin, int cycles, int delayTime) {
+  for (int j = 0; j < cycles; j++) {
+    // Быстрое включение
+    digitalWrite(pin, HIGH);
+    delay(50);
+    
+    // Медленное затухание
+    for (int i = FADE_STEPS; i >= 0; i--) {
+      analogWrite(pin, i * (255 / FADE_STEPS));
+      delay(delayTime);
+    }
+  }
+  digitalWrite(pin, LOW);
+}
+
+/**
+ * Чередующееся плавное мерцание двух светодиодов
+ * @param pin1 - Пин первого светодиода
+ * @param pin2 - Пин второго светодиода
+ * @param cycles - Количество циклов чередования
+ * @param delayTime - Задержка между шагами
+ */
+void alternatingFade(int pin1, int pin2, int cycles, int delayTime) {
+  for (int j = 0; j < cycles; j++) {
+    // Первый светодиод нарастает, второй убывает
+    for (int i = 0; i <= FADE_STEPS; i++) {
+      analogWrite(pin1, i * (255 / FADE_STEPS));
+      analogWrite(pin2, (FADE_STEPS - i) * (255 / FADE_STEPS));
+      delay(delayTime);
+    }
+    
+    // Первый светодиод убывает, второй нарастает
+    for (int i = 0; i <= FADE_STEPS; i++) {
+      analogWrite(pin1, (FADE_STEPS - i) * (255 / FADE_STEPS));
+      analogWrite(pin2, i * (255 / FADE_STEPS));
+      delay(delayTime);
+    }
+  }
+  digitalWrite(pin1, LOW);
+  digitalWrite(pin2, LOW);
 }
