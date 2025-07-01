@@ -3,7 +3,7 @@ const EMPLOYEES = {
   "0908070605040302": "Петров"
 };
 
-const MIN_INTERVAL_MINUTES = 5; // Минимальный интервал между срабатываниями
+const MIN_INTERVAL_MINUTES = 0.1; // Минимальный интервал между срабатываниями
 const WEEKEND_DAYS = [0, 6]; // Воскресенье (0) и Суббота (6)
 const DEFAULT_END_TIME = "17:00"; // Время автоматического закрытия дня
 
