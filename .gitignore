@@ -1,0 +1,25 @@
+# Arduino IDE files
+.vscode/
+.idea/
+*.tmp
+*.bak
+*.swp
+
+# Build files
+build/
+*.hex
+*.elf
+*.bin
+
+# Credentials and secrets
+credentials.h
+secrets.h
+
+# Windows specific
+Thumbs.db
+desktop.ini
+
+# Mac specific
+.DS_Store
+.AppleDouble
+.LSOverride 
