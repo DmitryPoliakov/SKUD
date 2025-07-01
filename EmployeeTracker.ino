@@ -63,6 +63,7 @@ void loop() {
       serial += String(addr[i], HEX);
     }
     serial.toUpperCase();
+    Serial.println("Считан ключ: " + serial);
     
     // Получение текущего времени
     struct tm timeinfo;
@@ -75,12 +76,57 @@ void loop() {
     char timeStr[20];
     strftime(timeStr, sizeof(timeStr), "%Y-%m-%d %H:%M", &timeinfo);
 
-    // Отправка данных
-    bool success = sendToGoogleSheets(serial, timeStr);
+    // Отправка данных и получение ответа
+    String response = sendToGoogleSheets(serial, timeStr);
     
-    if (success) {
-      // Успешная отправка
-      blinkLED(GREEN_LED_PIN, 2);
+    // Обработка ответа
+    if (response.length() > 0) {
+      // Парсим JSON-ответ
+      StaticJsonDocument<256> doc;
+      DeserializationError error = deserializeJson(doc, response);
+      
+      if (!error) {
+        String status = doc["status"];
+        String message = doc["message"];
+        
+        Serial.println("Статус: " + status);
+        Serial.println("Сообщение: " + message);
+        
+        if (status == "success") {
+          String employee = doc["employee"];
+          String event = doc["event"];
+          String time = doc["time"];
+          
+          Serial.println("Сотрудник: " + employee);
+          Serial.println("Событие: " + event);
+          Serial.println("Время: " + time);
+          
+          // Визуальная индикация типа события
+          if (event == "приход") {
+            // Приход - два быстрых мигания зеленым
+            blinkLED(GREEN_LED_PIN, 2, 200);
+          } else if (event == "уход") {
+            // Уход - три быстрых мигания зеленым
+            blinkLED(GREEN_LED_PIN, 3, 200);
+          }
+        } else if (status == "ignored") {
+          // Игнорированное событие - попеременное мигание красным и зеленым
+          for (int i = 0; i < 2; i++) {
+            digitalWrite(RED_LED_PIN, HIGH);
+            delay(200);
+            digitalWrite(RED_LED_PIN, LOW);
+            digitalWrite(GREEN_LED_PIN, HIGH);
+            delay(200);
+            digitalWrite(GREEN_LED_PIN, LOW);
+          }
+        } else if (status == "unknown") {
+          // Неизвестный ключ - быстрое мигание красным
+          blinkLED(RED_LED_PIN, 5, 100);
+        }
+      } else {
+        Serial.println("Ошибка парсинга JSON");
+        blinkLED(RED_LED_PIN, 3);
+      }
     } else {
       // Ошибка отправки
       blinkLED(RED_LED_PIN, 3);
@@ -94,7 +140,9 @@ void loop() {
   delay(100);
 }
 
-bool sendToGoogleSheets(String serial, String time) {
+String sendToGoogleSheets(String serial, String time) {
+  String response = "";
+  
   if (WiFi.status() == WL_CONNECTED) {
     HTTPClient http;
     http.begin(googleScriptURL);
@@ -108,32 +156,31 @@ bool sendToGoogleSheets(String serial, String time) {
 
     int httpCode = http.POST(payload);
     if (httpCode > 0) {
-      String response = http.getString();
+      response = http.getString();
       Serial.println("HTTP Response: " + response);
-      http.end();
-      return true;
     } else {
       Serial.println("HTTP Error: " + String(httpCode));
-      http.end();
-      return false;
     }
+    http.end();
   } else {
     Serial.println("WiFi disconnected");
     blinkLED(RED_LED_PIN, 5); // Ошибка WiFi
-    return false;
   }
+  
+  return response;
 }
 
 /**
  * Мигает светодиодом указанное количество раз
  * @param pin - Пин светодиода
  * @param times - Количество миганий
+ * @param duration - Длительность мигания (опционально)
  */
-void blinkLED(int pin, int times) {
+void blinkLED(int pin, int times, int duration = LED_BLINK_DURATION) {
   for (int i = 0; i < times; i++) {
     digitalWrite(pin, HIGH);
-    delay(LED_BLINK_DURATION);
+    delay(duration);
     digitalWrite(pin, LOW);
-    delay(LED_BLINK_DURATION);
+    delay(duration);
   }
 }

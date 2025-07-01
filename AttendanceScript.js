@@ -3,7 +3,7 @@ const EMPLOYEES = {
   "0908070605040302": "Петров"
 };
 
-const MIN_INTERVAL_MINUTES = 0.1; // Минимальный интервал между срабатываниями
+const MIN_INTERVAL_MINUTES = 1; // Минимальный интервал между срабатываниями
 const WEEKEND_DAYS = [0, 6]; // Воскресенье (0) и Суббота (6)
 const DEFAULT_END_TIME = "17:00"; // Время автоматического закрытия дня
 
@@ -15,7 +15,10 @@ function doPost(e) {
   
   // Проверка сотрудника
   if (!(serial in EMPLOYEES)) {
-    return ContentService.createTextOutput(JSON.stringify({status: "unknown"})).setMimeType(ContentService.MimeType.JSON);
+    return ContentService.createTextOutput(JSON.stringify({
+      status: "unknown",
+      message: "Неизвестный ключ: " + serial
+    })).setMimeType(ContentService.MimeType.JSON);
   }
   var name = EMPLOYEES[serial];
   
@@ -53,22 +56,39 @@ function doPost(e) {
     var lastDateTime = new Date(lastTime);
     var timeDiff = (dateTime - lastDateTime) / (1000 * 60); // Разница в минутах
     if (timeDiff < MIN_INTERVAL_MINUTES) {
-      return ContentService.createTextOutput(JSON.stringify({status: "ignored"})).setMimeType(ContentService.MimeType.JSON);
+      return ContentService.createTextOutput(JSON.stringify({
+        status: "ignored",
+        message: "Повторное срабатывание. Прошло менее " + MIN_INTERVAL_MINUTES + " минут",
+        employee: name,
+        lastTime: Utilities.formatDate(lastDateTime, "GMT+3", "HH:mm:ss")
+      })).setMimeType(ContentService.MimeType.JSON);
     }
   }
   scriptProperties.setProperty(lastTimeKey, time);
   
   // Определение прихода/ухода
   var currentValue = sheet.getRange(rowIndex, colIndex).getValue();
+  var eventType = "";
+  
   if (currentValue == "" || !currentValue.includes("Приход")) {
     // Записать приход
     sheet.getRange(rowIndex, colIndex).setValue("Приход: " + timeStr + ", Уход: -");
+    eventType = "приход";
   } else {
     // Обновить уход
-    sheet.getRange(rowIndex, colIndex).setValue("Приход: " + currentValue.split(",")[0].split(": ")[1] + ", Уход: " + timeStr);
+    var arrivalTime = currentValue.split(",")[0].split(": ")[1];
+    sheet.getRange(rowIndex, colIndex).setValue("Приход: " + arrivalTime + ", Уход: " + timeStr);
+    eventType = "уход";
   }
   
-  return ContentService.createTextOutput(JSON.stringify({status: "success"})).setMimeType(ContentService.MimeType.JSON);
+  return ContentService.createTextOutput(JSON.stringify({
+    status: "success",
+    message: "Данные успешно записаны",
+    employee: name,
+    event: eventType,
+    time: timeStr,
+    date: dateStr
+  })).setMimeType(ContentService.MimeType.JSON);
 }
 
 /**
