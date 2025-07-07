@@ -573,3 +573,10 @@ OSError: [WinError 6] Неверный дескриптор
 Для добавления сотрудника отправьте команду:
 /add_employee 08669221 Имя_Сотрудника
 2025-07-07 19:54:20,195 - werkzeug - INFO - 192.168.0.22 - - [07/Jul/2025 19:54:20] "[33mPOST /api/attendance HTTP/1.1[0m" 404 -
+2025-07-08 00:59:52,088 - asyncio - ERROR - Cancelling an overlapped future failed
+future: <_OverlappedFuture pending cb=[_ProactorReadPipeTransport._loop_reading()]>
+Traceback (most recent call last):
+  File "C:\Users\user\AppData\Local\Programs\Python\Python313\Lib\asyncio\windows_events.py", line 72, in _cancel_overlapped
+    self._ov.cancel()
+    ~~~~~~~~~~~~~~~^^
+OSError: [WinError 6] Неверный дескриптор

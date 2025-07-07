@@ -41,7 +41,8 @@ const char* backup_ssid = "TP-link";
 const char* backup_password = "4722027";
 
 // Python API URL - IP-адрес вашего сервера
-const char* serverURL = "http://192.168.0.18:5000/api/attendance";
+const char* serverURL = "http://194.87.43.42/api/attendance";
+//http://194.87.43.42:5000/dashboard
 
 // LEDs
 #define GREEN_LED_PIN 4  // Green LED pin
