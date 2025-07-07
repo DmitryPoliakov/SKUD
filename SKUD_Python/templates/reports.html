@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}Отчеты | СКУД{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Отчеты</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Генерация отчета</h5>
+            </div>
+            <div class="card-body">
+                <form action="{{ url_for('generate_report') }}" method="post">
+                    <div class="mb-3">
+                        <label for="report_year" class="form-label">Год</label>
+                        <select class="form-select" id="report_year" name="year" required>
+                            {% for year in available_years %}
+                            <option value="{{ year }}">{{ year }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="report_month" class="form-label">Месяц</label>
+                        <select class="form-select" id="report_month" name="month" required>
+                            {% for month_num, month_name in months.items() %}
+                            <option value="{{ month_num }}">{{ month_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="report_type" class="form-label">Тип отчета</label>
+                        <select class="form-select" id="report_type" name="report_type" required>
+                            <option value="excel">Excel</option>
+                            <option value="pdf">PDF</option>
+                            <option value="csv">CSV</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Сгенерировать отчет</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Последние отчеты</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for report in recent_reports %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>{{ report.name }}</span>
+                        <a href="{{ url_for('download_report', filename=report.filename) }}" class="btn btn-sm btn-outline-primary">Скачать</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5>Аналитика</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <h6>Среднее время прихода по дням недели</h6>
+                <canvas id="weekdayArrivalChart"></canvas>
+            </div>
+            <div class="col-md-6 mb-4">
+                <h6>Среднее количество рабочих часов по сотрудникам</h6>
+                <canvas id="employeeHoursChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // График среднего времени прихода по дням недели
+        const weekdayCtx = document.getElementById('weekdayArrivalChart').getContext('2d');
+        new Chart(weekdayCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'],
+                datasets: [{
+                    label: 'Среднее время прихода (часы)',
+                    data: {{ weekday_arrival_data|tojson }},
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 24
+                    }
+                }
+            }
+        });
+
+        // График среднего количества рабочих часов по сотрудникам
+        const employeeCtx = document.getElementById('employeeHoursChart').getContext('2d');
+        new Chart(employeeCtx, {
+            type: 'bar',
+            data: {
+                labels: {{ employee_labels|tojson }},
+                datasets: [{
+                    label: 'Среднее количество рабочих часов',
+                    data: {{ employee_hours_data|tojson }},
+                    backgroundColor: 'rgba(153, 102, 255, 0.5)',
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

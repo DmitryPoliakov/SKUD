@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block title %}Панель управления | СКУД{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Панель управления</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Статистика сегодня</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="stat-card text-center p-3 border rounded">
+                            <h3>{{ today_present }}</h3>
+                            <p class="text-muted">Присутствует</p>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="stat-card text-center p-3 border rounded">
+                            <h3>{{ today_absent }}</h3>
+                            <p class="text-muted">Отсутствует</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Последние события</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for event in recent_events %}
+                    <li class="list-group-item">
+                        <strong>{{ event.employee }}</strong>: {{ event.event_type }} в {{ event.time }}
+                        <small class="text-muted">({{ event.date }})</small>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Посещаемость за неделю</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="weeklyAttendanceChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Среднее время прихода</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="averageArrivalChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Данные для графика посещаемости за неделю
+    const weeklyData = {
+        labels: {{ weekly_labels|tojson }},
+        datasets: [{
+            label: 'Количество сотрудников',
+            data: {{ weekly_data|tojson }},
+            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+        }]
+    };
+
+    // Данные для графика среднего времени прихода
+    const arrivalData = {
+        labels: {{ arrival_labels|tojson }},
+        datasets: [{
+            label: 'Среднее время прихода (часы)',
+            data: {{ arrival_data|tojson }},
+            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+        }]
+    };
+
+    // Инициализация графиков
+    document.addEventListener('DOMContentLoaded', function() {
+        const weeklyCtx = document.getElementById('weeklyAttendanceChart').getContext('2d');
+        new Chart(weeklyCtx, {
+            type: 'bar',
+            data: weeklyData,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        const arrivalCtx = document.getElementById('averageArrivalChart').getContext('2d');
+        new Chart(arrivalCtx, {
+            type: 'bar',
+            data: arrivalData,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 24
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

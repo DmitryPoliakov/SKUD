@@ -1,0 +1,575 @@
+2025-07-06 02:30:57,595 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 02:30:57,622 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.18:5000
+2025-07-06 02:30:57,623 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-06 02:30:57,624 - werkzeug - INFO -  * Restarting with stat
+2025-07-06 02:30:58,176 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 02:30:58,188 - werkzeug - WARNING -  * Debugger is active!
+2025-07-06 02:30:58,190 - werkzeug - INFO -  * Debugger PIN: 520-085-591
+2025-07-06 02:39:21,724 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 02:39:21,768 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.18:5000
+2025-07-06 02:39:21,768 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-06 02:39:21,772 - werkzeug - INFO -  * Restarting with stat
+2025-07-06 02:39:22,620 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 02:39:22,646 - werkzeug - WARNING -  * Debugger is active!
+2025-07-06 02:39:22,651 - werkzeug - INFO -  * Debugger PIN: 520-085-591
+2025-07-06 02:39:53,447 - werkzeug - INFO - 192.168.0.18 - - [06/Jul/2025 02:39:53] "[33mGET / HTTP/1.1[0m" 404 -
+2025-07-06 02:39:53,485 - werkzeug - INFO - 192.168.0.18 - - [06/Jul/2025 02:39:53] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-07-06 02:40:20,729 - werkzeug - INFO - 127.0.0.1 - - [06/Jul/2025 02:40:20] "[33mGET / HTTP/1.1[0m" 404 -
+2025-07-06 02:40:20,771 - werkzeug - INFO - 127.0.0.1 - - [06/Jul/2025 02:40:20] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-07-06 02:48:18,777 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 02:48:18,796 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.18:5000
+2025-07-06 02:48:18,796 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-06 02:48:18,797 - werkzeug - INFO -  * Restarting with stat
+2025-07-06 02:48:19,254 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 02:48:19,262 - werkzeug - WARNING -  * Debugger is active!
+2025-07-06 02:48:19,266 - werkzeug - INFO -  * Debugger PIN: 110-525-262
+2025-07-06 02:50:31,719 - __main__ - INFO - Получены данные: {'serial': '992BEE97', 'time': '2025-07-06 02:50:28'}
+2025-07-06 02:50:31,720 - __main__ - INFO - Сотрудник: Поляков
+2025-07-06 02:50:31,728 - __main__ - INFO - Записано событие: приход для Поляков в 02:50
+2025-07-06 02:50:31,729 - werkzeug - INFO - 192.168.0.4 - - [06/Jul/2025 02:50:31] "POST /api/attendance HTTP/1.1" 200 -
+2025-07-06 02:50:46,225 - __main__ - INFO - Получены данные: {'serial': '992BEE97', 'time': '2025-07-06 02:50:44'}
+2025-07-06 02:50:46,228 - __main__ - INFO - Сотрудник: Поляков
+2025-07-06 02:50:46,238 - __main__ - INFO - Записано событие: уход для Поляков в 02:50
+2025-07-06 02:50:46,238 - werkzeug - INFO - 192.168.0.4 - - [06/Jul/2025 02:50:46] "POST /api/attendance HTTP/1.1" 200 -
+2025-07-06 02:51:35,784 - __main__ - INFO - Получены данные: {'serial': '992BEE97', 'time': '2025-07-06 02:51:33'}
+2025-07-06 02:51:35,786 - __main__ - INFO - Сотрудник: Поляков
+2025-07-06 02:51:35,792 - __main__ - INFO - Записано событие: уход (повтор) для Поляков в 02:51
+2025-07-06 02:51:35,792 - werkzeug - INFO - 192.168.0.4 - - [06/Jul/2025 02:51:35] "POST /api/attendance HTTP/1.1" 200 -
+2025-07-06 02:51:50,359 - __main__ - INFO - Получены данные: {'serial': '894046B8', 'time': '2025-07-06 02:51:48'}
+2025-07-06 02:51:50,361 - __main__ - INFO - Сотрудник: Тарасов
+2025-07-06 02:51:50,370 - __main__ - INFO - Записано событие: приход для Тарасов в 02:51
+2025-07-06 02:51:50,370 - werkzeug - INFO - 192.168.0.4 - - [06/Jul/2025 02:51:50] "POST /api/attendance HTTP/1.1" 200 -
+2025-07-06 02:54:04,188 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Documents\\PythonProject\\SKUD\\SKUD_Python\\app\\telegram_bot.py', reloading
+2025-07-06 02:54:04,691 - werkzeug - INFO -  * Restarting with stat
+2025-07-06 02:54:06,144 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 02:54:06,157 - werkzeug - WARNING -  * Debugger is active!
+2025-07-06 02:54:06,161 - werkzeug - INFO -  * Debugger PIN: 110-525-262
+2025-07-06 02:54:19,835 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Documents\\PythonProject\\SKUD\\SKUD_Python\\app\\telegram_bot.py', reloading
+2025-07-06 02:54:20,291 - werkzeug - INFO -  * Restarting with stat
+2025-07-06 02:54:22,507 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 02:54:22,524 - werkzeug - WARNING -  * Debugger is active!
+2025-07-06 02:54:22,531 - werkzeug - INFO -  * Debugger PIN: 110-525-262
+2025-07-06 02:54:34,988 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Documents\\PythonProject\\SKUD\\SKUD_Python\\app\\main.py', reloading
+2025-07-06 02:54:35,131 - werkzeug - INFO -  * Restarting with stat
+2025-07-06 02:54:35,955 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 02:54:35,970 - werkzeug - WARNING -  * Debugger is active!
+2025-07-06 02:54:35,976 - werkzeug - INFO -  * Debugger PIN: 110-525-262
+2025-07-06 02:54:48,398 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Documents\\PythonProject\\SKUD\\SKUD_Python\\app\\main.py', reloading
+2025-07-06 02:54:48,571 - werkzeug - INFO -  * Restarting with stat
+2025-07-06 02:54:49,202 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 02:54:49,215 - werkzeug - WARNING -  * Debugger is active!
+2025-07-06 02:54:49,219 - werkzeug - INFO -  * Debugger PIN: 110-525-262
+2025-07-06 02:55:01,618 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Documents\\PythonProject\\SKUD\\SKUD_Python\\app\\main.py', reloading
+2025-07-06 02:55:01,762 - werkzeug - INFO -  * Restarting with stat
+2025-07-06 02:55:02,349 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 02:55:02,360 - werkzeug - WARNING -  * Debugger is active!
+2025-07-06 02:55:02,364 - werkzeug - INFO -  * Debugger PIN: 110-525-262
+2025-07-06 02:55:30,086 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 02:55:30,117 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.18:5000
+2025-07-06 02:55:30,118 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-06 02:55:30,120 - werkzeug - INFO -  * Restarting with stat
+2025-07-06 02:55:30,528 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 02:55:30,536 - werkzeug - WARNING -  * Debugger is active!
+2025-07-06 02:55:30,539 - werkzeug - INFO -  * Debugger PIN: 110-525-262
+2025-07-06 02:56:15,453 - __main__ - INFO - Получены данные: {'serial': '992BEE97', 'time': '2025-07-06 02:56:13'}
+2025-07-06 02:56:15,455 - __main__ - INFO - Сотрудник: Поляков
+2025-07-06 02:56:15,466 - __main__ - INFO - Записано событие: уход (повтор) для Поляков в 02:56
+2025-07-06 02:56:16,567 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7853971577:AAGjaqm1yeEpy1mY8sk7ll7bnDyS2_cLDGY/sendMessage "HTTP/1.1 200 OK"
+2025-07-06 02:56:16,704 - werkzeug - INFO - 192.168.0.4 - - [06/Jul/2025 02:56:16] "POST /api/attendance HTTP/1.1" 200 -
+2025-07-06 02:56:23,882 - __main__ - INFO - Получены данные: {'serial': '894046B8', 'time': '2025-07-06 02:56:22'}
+2025-07-06 02:56:23,884 - __main__ - INFO - Сотрудник: Тарасов
+2025-07-06 02:56:23,893 - __main__ - INFO - Записано событие: уход для Тарасов в 02:56
+2025-07-06 02:56:24,639 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7853971577:AAGjaqm1yeEpy1mY8sk7ll7bnDyS2_cLDGY/sendMessage "HTTP/1.1 200 OK"
+2025-07-06 02:56:24,657 - werkzeug - INFO - 192.168.0.4 - - [06/Jul/2025 02:56:24] "POST /api/attendance HTTP/1.1" 200 -
+2025-07-06 02:56:39,331 - __main__ - INFO - Получены данные: {'serial': 'E9DBA5A3', 'time': '2025-07-06 02:56:37'}
+2025-07-06 02:56:39,333 - __main__ - WARNING - Неизвестный серийный номер: E9DBA5A3
+2025-07-06 02:56:39,334 - werkzeug - INFO - 192.168.0.4 - - [06/Jul/2025 02:56:39] "[33mPOST /api/attendance HTTP/1.1[0m" 404 -
+2025-07-06 02:59:29,076 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Documents\\PythonProject\\SKUD\\SKUD_Python\\app\\main.py', reloading
+2025-07-06 02:59:29,169 - asyncio - ERROR - Cancelling an overlapped future failed
+future: <_OverlappedFuture pending cb=[_ProactorReadPipeTransport._loop_reading()]>
+Traceback (most recent call last):
+  File "C:\Users\user\AppData\Local\Programs\Python\Python313\Lib\asyncio\windows_events.py", line 72, in _cancel_overlapped
+    self._ov.cancel()
+    ~~~~~~~~~~~~~~~^^
+OSError: [WinError 6] Неверный дескриптор
+2025-07-06 02:59:29,443 - werkzeug - INFO -  * Restarting with stat
+2025-07-06 02:59:29,825 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 02:59:29,833 - werkzeug - WARNING -  * Debugger is active!
+2025-07-06 02:59:29,837 - werkzeug - INFO -  * Debugger PIN: 110-525-262
+2025-07-06 02:59:47,314 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Documents\\PythonProject\\SKUD\\SKUD_Python\\app\\main.py', reloading
+2025-07-06 02:59:47,484 - werkzeug - INFO -  * Restarting with stat
+2025-07-06 02:59:47,861 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 02:59:47,869 - werkzeug - WARNING -  * Debugger is active!
+2025-07-06 02:59:47,872 - werkzeug - INFO -  * Debugger PIN: 110-525-262
+2025-07-06 02:59:50,116 - __main__ - INFO - Получены данные: {'serial': '894046B8', 'time': '2025-07-06 02:59:47'}
+2025-07-06 02:59:50,118 - __main__ - INFO - Сотрудник: Тарасов
+2025-07-06 02:59:50,125 - __main__ - INFO - Записано событие: уход (повтор) для Тарасов в 02:59
+2025-07-06 02:59:51,243 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7853971577:AAGjaqm1yeEpy1mY8sk7ll7bnDyS2_cLDGY/sendMessage "HTTP/1.1 200 OK"
+2025-07-06 02:59:51,268 - werkzeug - INFO - 192.168.0.4 - - [06/Jul/2025 02:59:51] "POST /api/attendance HTTP/1.1" 200 -
+2025-07-06 02:59:59,423 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Documents\\PythonProject\\SKUD\\SKUD_Python\\app\\main.py', reloading
+2025-07-06 02:59:59,493 - asyncio - ERROR - Cancelling an overlapped future failed
+future: <_OverlappedFuture pending cb=[_ProactorReadPipeTransport._loop_reading()]>
+Traceback (most recent call last):
+  File "C:\Users\user\AppData\Local\Programs\Python\Python313\Lib\asyncio\windows_events.py", line 72, in _cancel_overlapped
+    self._ov.cancel()
+    ~~~~~~~~~~~~~~~^^
+OSError: [WinError 6] Неверный дескриптор
+2025-07-06 02:59:59,660 - werkzeug - INFO -  * Restarting with stat
+2025-07-06 03:00:00,044 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 03:00:00,052 - werkzeug - WARNING -  * Debugger is active!
+2025-07-06 03:00:00,054 - werkzeug - INFO -  * Debugger PIN: 110-525-262
+2025-07-06 03:00:02,385 - __main__ - INFO - Получены данные: {'serial': '992BEE97', 'time': '2025-07-06 03:00:00'}
+2025-07-06 03:00:02,386 - __main__ - INFO - Сотрудник: Поляков
+2025-07-06 03:00:02,390 - __main__ - INFO - Записано событие: уход (повтор) для Поляков в 03:00
+2025-07-06 03:00:03,690 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7853971577:AAGjaqm1yeEpy1mY8sk7ll7bnDyS2_cLDGY/sendMessage "HTTP/1.1 200 OK"
+2025-07-06 03:00:03,706 - werkzeug - INFO - 192.168.0.4 - - [06/Jul/2025 03:00:03] "POST /api/attendance HTTP/1.1" 200 -
+2025-07-06 03:00:09,583 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Documents\\PythonProject\\SKUD\\SKUD_Python\\app\\telegram_bot.py', reloading
+2025-07-06 03:00:09,776 - asyncio - ERROR - Cancelling an overlapped future failed
+future: <_OverlappedFuture pending cb=[_ProactorReadPipeTransport._loop_reading()]>
+Traceback (most recent call last):
+  File "C:\Users\user\AppData\Local\Programs\Python\Python313\Lib\asyncio\windows_events.py", line 72, in _cancel_overlapped
+    self._ov.cancel()
+    ~~~~~~~~~~~~~~~^^
+OSError: [WinError 6] Неверный дескриптор
+2025-07-06 03:00:10,131 - werkzeug - INFO -  * Restarting with stat
+2025-07-06 03:00:10,844 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 03:00:10,863 - werkzeug - WARNING -  * Debugger is active!
+2025-07-06 03:00:10,868 - werkzeug - INFO -  * Debugger PIN: 110-525-262
+2025-07-06 03:00:34,100 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Documents\\PythonProject\\SKUD\\SKUD_Python\\app\\telegram_bot.py', reloading
+2025-07-06 03:00:34,511 - werkzeug - INFO -  * Restarting with stat
+2025-07-06 03:00:35,601 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 03:00:35,615 - werkzeug - WARNING -  * Debugger is active!
+2025-07-06 03:00:35,619 - werkzeug - INFO -  * Debugger PIN: 110-525-262
+2025-07-06 03:00:44,991 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Documents\\PythonProject\\SKUD\\SKUD_Python\\app\\telegram_bot.py', reloading
+2025-07-06 03:00:45,303 - werkzeug - INFO -  * Restarting with stat
+2025-07-06 03:00:46,378 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 03:00:46,396 - werkzeug - WARNING -  * Debugger is active!
+2025-07-06 03:00:46,400 - werkzeug - INFO -  * Debugger PIN: 110-525-262
+2025-07-06 03:01:22,062 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Documents\\PythonProject\\SKUD\\SKUD_Python\\app\\db.py', reloading
+2025-07-06 03:01:22,661 - werkzeug - INFO -  * Restarting with stat
+2025-07-06 03:01:25,080 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 03:01:25,162 - werkzeug - WARNING -  * Debugger is active!
+2025-07-06 03:01:25,173 - werkzeug - INFO -  * Debugger PIN: 110-525-262
+2025-07-06 03:03:00,242 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 03:03:00,263 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.18:5000
+2025-07-06 03:03:00,264 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-06 03:03:00,265 - werkzeug - INFO -  * Restarting with stat
+2025-07-06 03:03:00,709 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 03:03:00,724 - werkzeug - WARNING -  * Debugger is active!
+2025-07-06 03:03:00,727 - werkzeug - INFO -  * Debugger PIN: 520-085-591
+2025-07-06 03:04:49,516 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 03:04:49,537 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.18:5000
+2025-07-06 03:04:49,537 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-06 03:04:49,538 - werkzeug - INFO -  * Restarting with stat
+2025-07-06 03:04:49,972 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 03:04:49,985 - werkzeug - WARNING -  * Debugger is active!
+2025-07-06 03:04:49,988 - werkzeug - INFO -  * Debugger PIN: 520-085-591
+2025-07-06 03:06:42,930 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 03:06:42,948 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.18:5000
+2025-07-06 03:06:42,948 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-06 03:06:42,949 - werkzeug - INFO -  * Restarting with stat
+2025-07-06 03:06:43,344 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 03:06:43,353 - werkzeug - WARNING -  * Debugger is active!
+2025-07-06 03:06:43,355 - werkzeug - INFO -  * Debugger PIN: 114-669-994
+2025-07-06 03:07:19,161 - __main__ - INFO - Получены данные: {'serial': '083BD5D8', 'time': '2025-07-06 03:07:17'}
+2025-07-06 03:07:19,163 - __main__ - WARNING - Неизвестный серийный номер: 083BD5D8
+2025-07-06 03:07:20,371 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7853971577:AAGjaqm1yeEpy1mY8sk7ll7bnDyS2_cLDGY/sendMessage "HTTP/1.1 200 OK"
+2025-07-06 03:07:20,408 - werkzeug - INFO - 192.168.0.4 - - [06/Jul/2025 03:07:20] "[33mPOST /api/attendance HTTP/1.1[0m" 404 -
+2025-07-06 03:07:46,973 - __main__ - INFO - Получены данные: {'serial': '080B5140', 'time': '2025-07-06 03:07:45'}
+2025-07-06 03:07:46,975 - __main__ - WARNING - Неизвестный серийный номер: 080B5140
+2025-07-06 03:07:47,669 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7853971577:AAGjaqm1yeEpy1mY8sk7ll7bnDyS2_cLDGY/sendMessage "HTTP/1.1 200 OK"
+2025-07-06 03:07:47,720 - werkzeug - INFO - 192.168.0.4 - - [06/Jul/2025 03:07:47] "[33mPOST /api/attendance HTTP/1.1[0m" 404 -
+2025-07-06 03:08:37,627 - asyncio - ERROR - Cancelling an overlapped future failed
+future: <_OverlappedFuture pending cb=[_ProactorReadPipeTransport._loop_reading()]>
+Traceback (most recent call last):
+  File "C:\Users\user\AppData\Local\Programs\Python\Python313\Lib\asyncio\windows_events.py", line 72, in _cancel_overlapped
+    self._ov.cancel()
+    ~~~~~~~~~~~~~~~^^
+OSError: [WinError 6] Неверный дескриптор
+2025-07-06 03:08:51,387 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 03:08:51,408 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.18:5000
+2025-07-06 03:08:51,408 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-06 03:08:51,409 - werkzeug - INFO -  * Restarting with stat
+2025-07-06 03:08:51,776 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 03:08:51,783 - werkzeug - WARNING -  * Debugger is active!
+2025-07-06 03:08:51,786 - werkzeug - INFO -  * Debugger PIN: 114-669-994
+2025-07-06 03:09:00,494 - __main__ - INFO - Получены данные: {'serial': 'E9DBA5A3', 'time': '2025-07-06 03:08:58'}
+2025-07-06 03:09:00,496 - __main__ - WARNING - Неизвестный серийный номер: E9DBA5A3
+2025-07-06 03:09:01,528 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7853971577:AAGjaqm1yeEpy1mY8sk7ll7bnDyS2_cLDGY/sendMessage "HTTP/1.1 200 OK"
+2025-07-06 03:09:01,563 - werkzeug - INFO - 192.168.0.4 - - [06/Jul/2025 03:09:01] "[33mPOST /api/attendance HTTP/1.1[0m" 404 -
+2025-07-06 03:09:13,464 - __main__ - INFO - Получены данные: {'serial': 'E9DBA5A3', 'time': '2025-07-06 03:09:08'}
+2025-07-06 03:09:13,466 - __main__ - WARNING - Неизвестный серийный номер: E9DBA5A3
+2025-07-06 03:09:14,141 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7853971577:AAGjaqm1yeEpy1mY8sk7ll7bnDyS2_cLDGY/sendMessage "HTTP/1.1 200 OK"
+2025-07-06 03:09:14,185 - werkzeug - INFO - 192.168.0.4 - - [06/Jul/2025 03:09:14] "[33mPOST /api/attendance HTTP/1.1[0m" 404 -
+2025-07-06 03:09:48,283 - __main__ - INFO - Получены данные: {'serial': '894046B8', 'time': '2025-07-06 03:09:46'}
+2025-07-06 03:09:48,285 - __main__ - INFO - Сотрудник: Тарасов
+2025-07-06 03:09:48,300 - __main__ - INFO - Записано событие: уход (повтор) для Тарасов в 03:09
+2025-07-06 03:09:49,162 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7853971577:AAGjaqm1yeEpy1mY8sk7ll7bnDyS2_cLDGY/sendMessage "HTTP/1.1 200 OK"
+2025-07-06 03:09:49,193 - werkzeug - INFO - 192.168.0.4 - - [06/Jul/2025 03:09:49] "POST /api/attendance HTTP/1.1" 200 -
+2025-07-06 03:09:53,930 - __main__ - INFO - Получены данные: {'serial': '992BEE97', 'time': '2025-07-06 03:09:52'}
+2025-07-06 03:09:53,932 - __main__ - INFO - Сотрудник: Поляков
+2025-07-06 03:09:53,941 - __main__ - INFO - Записано событие: уход (повтор) для Поляков в 03:09
+2025-07-06 03:09:54,636 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7853971577:AAGjaqm1yeEpy1mY8sk7ll7bnDyS2_cLDGY/sendMessage "HTTP/1.1 200 OK"
+2025-07-06 03:09:54,678 - werkzeug - INFO - 192.168.0.4 - - [06/Jul/2025 03:09:54] "POST /api/attendance HTTP/1.1" 200 -
+2025-07-06 03:10:01,826 - __main__ - INFO - Получены данные: {'serial': 'E9DBA5A3', 'time': '2025-07-06 03:10:00'}
+2025-07-06 03:10:01,828 - __main__ - INFO - Сотрудник: Шура
+2025-07-06 03:10:01,839 - __main__ - INFO - Записано событие: приход для Шура в 03:10
+2025-07-06 03:10:02,555 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7853971577:AAGjaqm1yeEpy1mY8sk7ll7bnDyS2_cLDGY/sendMessage "HTTP/1.1 200 OK"
+2025-07-06 03:10:02,593 - werkzeug - INFO - 192.168.0.4 - - [06/Jul/2025 03:10:02] "POST /api/attendance HTTP/1.1" 200 -
+2025-07-06 03:11:04,396 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Documents\\PythonProject\\SKUD\\SKUD_Python\\app\\main.py', reloading
+2025-07-06 03:11:04,430 - asyncio - ERROR - Cancelling an overlapped future failed
+future: <_OverlappedFuture pending cb=[_ProactorReadPipeTransport._loop_reading()]>
+Traceback (most recent call last):
+  File "C:\Users\user\AppData\Local\Programs\Python\Python313\Lib\asyncio\windows_events.py", line 72, in _cancel_overlapped
+    self._ov.cancel()
+    ~~~~~~~~~~~~~~~^^
+OSError: [WinError 6] Неверный дескриптор
+2025-07-06 03:11:04,563 - werkzeug - INFO -  * Restarting with stat
+2025-07-06 03:11:04,947 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 03:11:04,955 - werkzeug - WARNING -  * Debugger is active!
+2025-07-06 03:11:04,958 - werkzeug - INFO -  * Debugger PIN: 114-669-994
+2025-07-06 03:11:16,369 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Documents\\PythonProject\\SKUD\\SKUD_Python\\app\\main.py', reloading
+2025-07-06 03:11:16,438 - werkzeug - INFO -  * Restarting with stat
+2025-07-06 03:11:16,813 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 03:11:16,824 - werkzeug - WARNING -  * Debugger is active!
+2025-07-06 03:11:16,826 - werkzeug - INFO -  * Debugger PIN: 114-669-994
+2025-07-06 03:11:54,519 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 03:11:54,537 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.18:5000
+2025-07-06 03:11:54,537 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-06 03:11:54,538 - werkzeug - INFO -  * Restarting with stat
+2025-07-06 03:11:54,911 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 03:11:54,919 - werkzeug - WARNING -  * Debugger is active!
+2025-07-06 03:11:54,922 - werkzeug - INFO -  * Debugger PIN: 114-669-994
+2025-07-06 03:12:19,141 - __main__ - INFO - Получены данные: {'serial': '992BEE97', 'time': '2025-07-06 03:12:16'}
+2025-07-06 03:12:19,143 - __main__ - INFO - Сотрудник: Поляков
+2025-07-06 03:12:19,156 - __main__ - INFO - Записано событие: уход (повтор) для Поляков в 03:12
+2025-07-06 03:12:20,140 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7853971577:AAGjaqm1yeEpy1mY8sk7ll7bnDyS2_cLDGY/sendMessage "HTTP/1.1 200 OK"
+2025-07-06 03:12:20,143 - telegram_bot - INFO - Уведомление администратору отправлено: СКУД: Поляков: уход (повтор) в 03:12 (2025-07-06)
+2025-07-06 03:12:20,150 - werkzeug - INFO - 192.168.0.4 - - [06/Jul/2025 03:12:20] "POST /api/attendance HTTP/1.1" 200 -
+2025-07-06 03:12:28,852 - __main__ - INFO - Получены данные: {'serial': '992BEE97', 'time': '2025-07-06 03:12:27'}
+2025-07-06 03:12:28,854 - __main__ - INFO - Сотрудник: Поляков
+2025-07-06 03:12:28,865 - __main__ - INFO - Записано событие: уход (повтор) для Поляков в 03:12
+2025-07-06 03:12:29,732 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7853971577:AAGjaqm1yeEpy1mY8sk7ll7bnDyS2_cLDGY/sendMessage "HTTP/1.1 200 OK"
+2025-07-06 03:12:29,733 - telegram_bot - INFO - Уведомление администратору отправлено: СКУД: Поляков: уход (повтор) в 03:12 (2025-07-06)
+2025-07-06 03:12:29,736 - werkzeug - INFO - 192.168.0.4 - - [06/Jul/2025 03:12:29] "POST /api/attendance HTTP/1.1" 200 -
+2025-07-06 03:13:48,620 - __main__ - INFO - Получены данные: {'serial': 'E9DBA5A3', 'time': '2025-07-06 03:13:47'}
+2025-07-06 03:13:48,622 - __main__ - INFO - Сотрудник: Шура
+2025-07-06 03:13:48,638 - __main__ - INFO - Записано событие: уход для Шура в 03:13
+2025-07-06 03:13:49,548 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7853971577:AAGjaqm1yeEpy1mY8sk7ll7bnDyS2_cLDGY/sendMessage "HTTP/1.1 200 OK"
+2025-07-06 03:13:49,552 - telegram_bot - INFO - Уведомление администратору отправлено: СКУД: Шура: уход в 03:13 (2025-07-06)
+2025-07-06 03:13:49,559 - werkzeug - INFO - 192.168.0.4 - - [06/Jul/2025 03:13:49] "POST /api/attendance HTTP/1.1" 200 -
+2025-07-06 03:25:17,928 - asyncio - ERROR - Cancelling an overlapped future failed
+future: <_OverlappedFuture pending cb=[_ProactorReadPipeTransport._loop_reading()]>
+Traceback (most recent call last):
+  File "C:\Users\user\AppData\Local\Programs\Python\Python313\Lib\asyncio\windows_events.py", line 72, in _cancel_overlapped
+    self._ov.cancel()
+    ~~~~~~~~~~~~~~~^^
+OSError: [WinError 6] Неверный дескриптор
+2025-07-06 03:35:14,489 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 03:35:14,509 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.18:5000
+2025-07-06 03:35:14,509 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-06 03:35:14,510 - werkzeug - INFO -  * Restarting with stat
+2025-07-06 03:35:14,882 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 03:35:14,891 - werkzeug - WARNING -  * Debugger is active!
+2025-07-06 03:35:14,893 - werkzeug - INFO -  * Debugger PIN: 114-669-994
+2025-07-06 03:35:45,474 - werkzeug - INFO - 127.0.0.1 - - [06/Jul/2025 03:35:45] "[33mGET / HTTP/1.1[0m" 404 -
+2025-07-06 03:35:45,516 - werkzeug - INFO - 127.0.0.1 - - [06/Jul/2025 03:35:45] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-07-06 03:35:57,709 - werkzeug - INFO - 127.0.0.1 - - [06/Jul/2025 03:35:57] "[33mGET / HTTP/1.1[0m" 404 -
+2025-07-06 03:35:58,966 - werkzeug - INFO - 127.0.0.1 - - [06/Jul/2025 03:35:58] "[33mGET / HTTP/1.1[0m" 404 -
+2025-07-06 03:36:02,249 - werkzeug - INFO - 192.168.0.18 - - [06/Jul/2025 03:36:02] "[33mGET / HTTP/1.1[0m" 404 -
+2025-07-06 03:36:09,575 - werkzeug - INFO - 192.168.0.18 - - [06/Jul/2025 03:36:09] "[33mGET / HTTP/1.1[0m" 404 -
+2025-07-06 03:36:37,273 - __main__ - INFO - Получены данные: {'serial': '992BEE97', 'time': '2025-07-06 03:36:30'}
+2025-07-06 03:36:37,274 - __main__ - INFO - Сотрудник: Поляков
+2025-07-06 03:36:37,288 - __main__ - INFO - Записано событие: уход (повтор) для Поляков в 03:36
+2025-07-06 03:36:38,784 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7853971577:AAGjaqm1yeEpy1mY8sk7ll7bnDyS2_cLDGY/sendMessage "HTTP/1.1 200 OK"
+2025-07-06 03:36:38,786 - telegram_bot - INFO - Уведомление администратору отправлено: СКУД: Поляков: уход (повтор) в 03:36 (2025-07-06)
+2025-07-06 03:36:38,792 - werkzeug - INFO - 192.168.0.4 - - [06/Jul/2025 03:36:38] "POST /api/attendance HTTP/1.1" 200 -
+2025-07-06 03:39:39,050 - werkzeug - INFO - 192.168.0.18 - - [06/Jul/2025 03:39:39] "[33mGET / HTTP/1.1[0m" 404 -
+2025-07-06 03:39:40,297 - werkzeug - INFO - 192.168.0.18 - - [06/Jul/2025 03:39:40] "[33mGET / HTTP/1.1[0m" 404 -
+2025-07-06 03:51:25,395 - __main__ - INFO - Получены данные: {'serial': '992BEE97', 'time': '2025-07-06 03:51:23'}
+2025-07-06 03:51:25,397 - __main__ - INFO - Сотрудник: Поляков
+2025-07-06 03:51:25,411 - __main__ - INFO - Записано событие: уход (повтор) для Поляков в 03:51
+2025-07-06 03:51:26,375 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7853971577:AAGjaqm1yeEpy1mY8sk7ll7bnDyS2_cLDGY/sendMessage "HTTP/1.1 200 OK"
+2025-07-06 03:51:26,377 - telegram_bot - INFO - Уведомление администратору отправлено: СКУД: Поляков: уход (повтор) в 03:51 (2025-07-06)
+2025-07-06 03:51:26,382 - werkzeug - INFO - 192.168.0.4 - - [06/Jul/2025 03:51:26] "POST /api/attendance HTTP/1.1" 200 -
+2025-07-06 11:39:23,176 - asyncio - ERROR - Cancelling an overlapped future failed
+future: <_OverlappedFuture pending cb=[_ProactorReadPipeTransport._loop_reading()]>
+Traceback (most recent call last):
+  File "C:\Users\user\AppData\Local\Programs\Python\Python313\Lib\asyncio\windows_events.py", line 72, in _cancel_overlapped
+    self._ov.cancel()
+    ~~~~~~~~~~~~~~~^^
+OSError: [WinError 6] Неверный дескриптор
+2025-07-06 11:40:47,823 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 11:40:47,916 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.18:5000
+2025-07-06 11:40:47,917 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-06 11:40:47,920 - werkzeug - INFO -  * Restarting with stat
+2025-07-06 11:40:49,194 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 11:40:49,223 - werkzeug - WARNING -  * Debugger is active!
+2025-07-06 11:40:49,231 - werkzeug - INFO -  * Debugger PIN: 110-525-262
+2025-07-06 11:42:05,607 - werkzeug - INFO - 192.168.0.18 - - [06/Jul/2025 11:42:05] "[33mGET / HTTP/1.1[0m" 404 -
+2025-07-06 11:42:07,904 - werkzeug - INFO - 192.168.0.18 - - [06/Jul/2025 11:42:07] "[33mGET / HTTP/1.1[0m" 404 -
+2025-07-06 11:42:08,906 - werkzeug - INFO - 192.168.0.18 - - [06/Jul/2025 11:42:08] "[33mGET / HTTP/1.1[0m" 404 -
+2025-07-06 11:42:27,113 - werkzeug - INFO - 127.0.0.1 - - [06/Jul/2025 11:42:27] "[33mGET / HTTP/1.1[0m" 404 -
+2025-07-06 11:43:09,029 - werkzeug - INFO - 127.0.0.1 - - [06/Jul/2025 11:43:09] "[33mGET / HTTP/1.1[0m" 404 -
+2025-07-06 11:49:52,359 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 11:49:52,377 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.18:5000
+2025-07-06 11:49:52,377 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-06 11:49:52,378 - werkzeug - INFO -  * Restarting with stat
+2025-07-06 11:49:52,745 - __main__ - INFO - Запуск сервера СКУД
+2025-07-06 11:49:52,754 - werkzeug - WARNING -  * Debugger is active!
+2025-07-06 11:49:52,756 - werkzeug - INFO -  * Debugger PIN: 114-669-994
+2025-07-06 11:49:59,129 - werkzeug - INFO - 127.0.0.1 - - [06/Jul/2025 11:49:59] "[33mGET / HTTP/1.1[0m" 404 -
+2025-07-06 11:50:00,768 - werkzeug - INFO - 127.0.0.1 - - [06/Jul/2025 11:50:00] "[33mGET / HTTP/1.1[0m" 404 -
+2025-07-06 11:50:02,901 - werkzeug - INFO - 127.0.0.1 - - [06/Jul/2025 11:50:02] "[33mGET / HTTP/1.1[0m" 404 -
+2025-07-06 11:50:10,876 - werkzeug - INFO - 192.168.0.18 - - [06/Jul/2025 11:50:10] "[33mGET / HTTP/1.1[0m" 404 -
+2025-07-06 11:50:13,330 - werkzeug - INFO - 192.168.0.18 - - [06/Jul/2025 11:50:13] "[33mGET / HTTP/1.1[0m" 404 -
+2025-07-06 11:50:46,371 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Documents\\PythonProject\\SKUD\\SKUD_Python\\app\\main.py', reloading
+2025-07-06 11:50:46,820 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Documents\\PythonProject\\SKUD\\SKUD_Python\\app\\main.py', reloading
+2025-07-06 11:50:47,121 - werkzeug - INFO -  * Restarting with stat
+2025-07-07 19:21:52,819 - __main__ - INFO - Запуск сервера СКУД
+2025-07-07 19:21:52,875 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.18:5000
+2025-07-07 19:21:52,875 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-07 19:21:52,880 - werkzeug - INFO -  * Restarting with stat
+2025-07-07 19:21:53,504 - __main__ - INFO - Запуск сервера СКУД
+2025-07-07 19:21:53,523 - werkzeug - WARNING -  * Debugger is active!
+2025-07-07 19:21:53,527 - werkzeug - INFO -  * Debugger PIN: 520-085-591
+2025-07-07 19:22:03,122 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:22:03] "[33mGET / HTTP/1.1[0m" 404 -
+2025-07-07 19:22:04,628 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:22:04] "[33mGET / HTTP/1.1[0m" 404 -
+2025-07-07 19:22:07,883 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:22:07] "[33mGET / HTTP/1.1[0m" 404 -
+2025-07-07 19:22:09,383 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:22:09] "[33mGET / HTTP/1.1[0m" 404 -
+2025-07-07 19:22:25,807 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:22:25] "[33mGET / HTTP/1.1[0m" 404 -
+2025-07-07 19:24:44,497 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Documents\\PythonProject\\SKUD\\SKUD_Python\\app\\main.py', reloading
+2025-07-07 19:24:44,622 - werkzeug - INFO -  * Restarting with stat
+2025-07-07 19:24:45,255 - __main__ - INFO - Запуск сервера СКУД
+2025-07-07 19:24:45,281 - werkzeug - WARNING -  * Debugger is active!
+2025-07-07 19:24:45,283 - werkzeug - INFO -  * Debugger PIN: 520-085-591
+2025-07-07 19:26:41,756 - __main__ - INFO - Запуск сервера СКУД
+2025-07-07 19:26:41,870 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.18:5000
+2025-07-07 19:26:41,871 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-07 19:26:41,889 - werkzeug - INFO -  * Restarting with stat
+2025-07-07 19:26:43,752 - __main__ - INFO - Запуск сервера СКУД
+2025-07-07 19:26:43,771 - werkzeug - WARNING -  * Debugger is active!
+2025-07-07 19:26:43,774 - werkzeug - INFO -  * Debugger PIN: 520-085-591
+2025-07-07 19:26:53,303 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:26:53] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-07-07 19:26:53,368 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:26:53] "GET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2025-07-07 19:26:53,371 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:26:53] "GET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2025-07-07 19:26:53,411 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:26:53] "GET /?__debugger__=yes&cmd=resource&f=console.png&s=xOzJJQsFLps7PzXEIErf HTTP/1.1" 200 -
+2025-07-07 19:26:53,421 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:26:53] "GET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2025-07-07 19:26:58,251 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:26:58] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-07-07 19:26:58,267 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:26:58] "GET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2025-07-07 19:26:58,579 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:26:58] "GET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2025-07-07 19:26:58,924 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:26:58] "GET /?__debugger__=yes&cmd=resource&f=console.png&s=xOzJJQsFLps7PzXEIErf HTTP/1.1" 200 -
+2025-07-07 19:26:59,188 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:26:59] "GET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2025-07-07 19:30:28,220 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Documents\\PythonProject\\SKUD\\SKUD_Python\\app\\main.py', reloading
+2025-07-07 19:30:28,303 - werkzeug - INFO -  * Restarting with stat
+2025-07-07 19:30:28,864 - __main__ - INFO - Запуск сервера СКУД
+2025-07-07 19:30:28,884 - werkzeug - WARNING -  * Debugger is active!
+2025-07-07 19:30:28,890 - werkzeug - INFO -  * Debugger PIN: 520-085-591
+2025-07-07 19:32:52,840 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Documents\\PythonProject\\SKUD\\SKUD_Python\\app\\main.py', reloading
+2025-07-07 19:32:52,938 - werkzeug - INFO -  * Restarting with stat
+2025-07-07 19:32:53,584 - __main__ - INFO - Запуск сервера СКУД
+2025-07-07 19:32:53,608 - werkzeug - WARNING -  * Debugger is active!
+2025-07-07 19:32:53,611 - werkzeug - INFO -  * Debugger PIN: 520-085-591
+2025-07-07 19:36:50,446 - __main__ - INFO - Запуск сервера СКУД
+2025-07-07 19:36:50,504 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.18:5000
+2025-07-07 19:36:50,504 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-07 19:36:50,507 - werkzeug - INFO -  * Restarting with stat
+2025-07-07 19:36:51,000 - __main__ - INFO - Запуск сервера СКУД
+2025-07-07 19:36:51,012 - werkzeug - WARNING -  * Debugger is active!
+2025-07-07 19:36:51,017 - werkzeug - INFO -  * Debugger PIN: 520-085-591
+2025-07-07 19:36:59,582 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:36:59] "[32mGET / HTTP/1.1[0m" 302 -
+2025-07-07 19:36:59,619 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:36:59] "GET /dashboard HTTP/1.1" 200 -
+2025-07-07 19:36:59,869 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:36:59] "GET /static/css/style.css HTTP/1.1" 200 -
+2025-07-07 19:36:59,950 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:36:59] "GET /static/js/main.js HTTP/1.1" 200 -
+2025-07-07 19:37:09,017 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:37:09] "GET /dashboard HTTP/1.1" 200 -
+2025-07-07 19:37:09,104 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:37:09] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-07-07 19:37:09,274 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:37:09] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-07-07 19:37:10,470 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:37:10] "GET /attendance HTTP/1.1" 200 -
+2025-07-07 19:37:10,781 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:37:10] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-07-07 19:37:10,795 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:37:10] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-07-07 19:37:12,343 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:37:12] "GET /employees HTTP/1.1" 200 -
+2025-07-07 19:37:12,491 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:37:12] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-07-07 19:37:12,598 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:37:12] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-07-07 19:37:13,804 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:37:13] "[35m[1mGET /reports HTTP/1.1[0m" 500 -
+2025-07-07 19:37:14,077 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:37:14] "GET /reports?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2025-07-07 19:37:14,159 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:37:14] "GET /reports?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2025-07-07 19:37:14,478 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:37:14] "GET /reports?__debugger__=yes&cmd=resource&f=console.png&s=kCVOm9h58drnKgHryLCQ HTTP/1.1" 200 -
+2025-07-07 19:37:14,741 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:37:14] "GET /reports?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2025-07-07 19:37:18,792 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:37:18] "GET /employees HTTP/1.1" 200 -
+2025-07-07 19:37:19,107 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:37:19] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-07-07 19:37:19,108 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:37:19] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-07-07 19:37:22,760 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:37:22] "[35m[1mGET /reports HTTP/1.1[0m" 500 -
+2025-07-07 19:37:23,054 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:37:23] "[36mGET /reports?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-07-07 19:37:23,100 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:37:23] "[36mGET /reports?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2025-07-07 19:37:23,428 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:37:23] "[36mGET /reports?__debugger__=yes&cmd=resource&f=console.png&s=kCVOm9h58drnKgHryLCQ HTTP/1.1[0m" 304 -
+2025-07-07 19:37:27,767 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:37:27] "[35m[1mGET /reports HTTP/1.1[0m" 500 -
+2025-07-07 19:37:28,066 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:37:28] "[36mGET /reports?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-07-07 19:37:28,099 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:37:28] "[36mGET /reports?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2025-07-07 19:37:28,412 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:37:28] "[36mGET /reports?__debugger__=yes&cmd=resource&f=console.png&s=kCVOm9h58drnKgHryLCQ HTTP/1.1[0m" 304 -
+2025-07-07 19:39:46,700 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:39:46] "GET /dashboard HTTP/1.1" 200 -
+2025-07-07 19:39:46,765 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:39:46] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-07-07 19:39:46,951 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:39:46] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-07-07 19:44:22,559 - __main__ - INFO - Запуск сервера СКУД
+2025-07-07 19:44:22,597 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.18:5000
+2025-07-07 19:44:22,597 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-07 19:44:22,601 - werkzeug - INFO -  * Restarting with stat
+2025-07-07 19:44:23,144 - __main__ - INFO - Запуск сервера СКУД
+2025-07-07 19:44:23,163 - werkzeug - WARNING -  * Debugger is active!
+2025-07-07 19:44:23,166 - werkzeug - INFO -  * Debugger PIN: 520-085-591
+2025-07-07 19:44:54,953 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:44:54] "GET /dashboard HTTP/1.1" 200 -
+2025-07-07 19:44:55,012 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:44:55] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-07-07 19:44:55,199 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:44:55] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-07-07 19:44:57,178 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:44:57] "GET /dashboard HTTP/1.1" 200 -
+2025-07-07 19:44:57,267 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:44:57] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-07-07 19:44:57,435 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:44:57] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-07-07 19:44:59,165 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:44:59] "GET /attendance HTTP/1.1" 200 -
+2025-07-07 19:44:59,476 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:44:59] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-07-07 19:44:59,489 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:44:59] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-07-07 19:45:02,537 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:45:02] "GET /employees HTTP/1.1" 200 -
+2025-07-07 19:45:02,627 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:45:02] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-07-07 19:45:02,784 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:45:02] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-07-07 19:45:04,572 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:45:04] "[35m[1mGET /reports HTTP/1.1[0m" 500 -
+2025-07-07 19:45:04,861 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:45:04] "[36mGET /reports?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2025-07-07 19:45:04,907 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:45:04] "[36mGET /reports?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2025-07-07 19:45:05,220 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:45:05] "GET /reports?__debugger__=yes&cmd=resource&f=console.png&s=piWsBc97MYO7ALQy2WBc HTTP/1.1" 200 -
+2025-07-07 19:47:17,424 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Documents\\PythonProject\\SKUD\\SKUD_Python\\app\\main.py', reloading
+2025-07-07 19:47:17,825 - werkzeug - INFO -  * Restarting with stat
+2025-07-07 19:47:19,116 - __main__ - INFO - Запуск сервера СКУД
+2025-07-07 19:47:19,157 - werkzeug - WARNING -  * Debugger is active!
+2025-07-07 19:47:19,165 - werkzeug - INFO -  * Debugger PIN: 520-085-591
+2025-07-07 19:48:14,682 - __main__ - INFO - Запуск сервера СКУД
+2025-07-07 19:48:14,715 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.18:5000
+2025-07-07 19:48:14,715 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-07 19:48:14,717 - werkzeug - INFO -  * Restarting with stat
+2025-07-07 19:48:15,264 - __main__ - INFO - Запуск сервера СКУД
+2025-07-07 19:48:15,283 - werkzeug - WARNING -  * Debugger is active!
+2025-07-07 19:48:15,287 - werkzeug - INFO -  * Debugger PIN: 520-085-591
+2025-07-07 19:48:44,101 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:48:44] "GET /dashboard HTTP/1.1" 200 -
+2025-07-07 19:48:44,149 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:48:44] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-07-07 19:48:44,330 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:48:44] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-07-07 19:48:45,966 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:48:45] "GET /dashboard HTTP/1.1" 200 -
+2025-07-07 19:48:46,034 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:48:46] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-07-07 19:48:46,204 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:48:46] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-07-07 19:48:47,413 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:48:47] "GET /attendance HTTP/1.1" 200 -
+2025-07-07 19:48:47,707 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:48:47] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-07-07 19:48:47,740 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:48:47] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-07-07 19:48:49,376 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:48:49] "GET /employees HTTP/1.1" 200 -
+2025-07-07 19:48:49,508 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:48:49] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-07-07 19:48:49,634 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:48:49] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-07-07 19:48:50,948 - __main__ - INFO - Запуск функции reports()
+2025-07-07 19:48:50,950 - __main__ - INFO - Загружено записей посещаемости: 13
+2025-07-07 19:48:50,951 - __main__ - INFO - Доступные годы: ['2023', '2025']
+2025-07-07 19:48:50,955 - __main__ - INFO - День недели 0, найдено 2 записей о приходе
+2025-07-07 19:48:50,957 - __main__ - INFO - День недели 1, найдено 2 записей о приходе
+2025-07-07 19:48:50,958 - __main__ - INFO - День недели 2, найдено 2 записей о приходе
+2025-07-07 19:48:50,959 - __main__ - INFO - День недели 5, найдено 2 записей о приходе
+2025-07-07 19:48:50,960 - __main__ - INFO - День недели 6, найдено 5 записей о приходе
+2025-07-07 19:48:50,963 - __main__ - INFO - Сотрудник Поляков: средние часы работы 7.18 (из 6 записей)
+2025-07-07 19:48:50,964 - __main__ - ERROR - Ошибка при обработке данных для графика по сотрудникам: unconverted data remains:  
+2025-07-07 19:48:50,965 - __main__ - INFO - Найдено отчетов: 1
+2025-07-07 19:48:50,965 - __main__ - INFO - weekday_arrival_data: [8.92, 8.96, 8.92, 0, 0, 9.0, 5.35]
+2025-07-07 19:48:50,966 - __main__ - INFO - employee_labels: ['Поляков', 'Тарасов', 'Карта МИР 4635', 'Карта Прокатут', 'Карта МИР 0514', 'ЦУМ', 'Шура']
+2025-07-07 19:48:50,967 - __main__ - INFO - employee_hours_data: [0, 0, 0, 0, 0, 0, 0]
+2025-07-07 19:48:50,972 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:48:50] "GET /reports HTTP/1.1" 200 -
+2025-07-07 19:48:51,258 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:48:51] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-07-07 19:48:51,308 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:48:51] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-07-07 19:49:10,185 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:49:10] "GET /download_report/attendance_report_2025_07_July.xlsx HTTP/1.1" 200 -
+2025-07-07 19:50:56,225 - __main__ - INFO - Получены данные: {'serial': '992BEE97', 'time': '2025-07-07 19:50:52'}
+2025-07-07 19:50:56,228 - __main__ - INFO - Сотрудник: Поляков
+2025-07-07 19:50:56,243 - __main__ - INFO - Записано событие: приход для Поляков в 19:50
+2025-07-07 19:50:59,212 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7853971577:AAGjaqm1yeEpy1mY8sk7ll7bnDyS2_cLDGY/sendMessage "HTTP/1.1 200 OK"
+2025-07-07 19:50:59,215 - telegram_bot - INFO - Уведомление администратору отправлено: СКУД: Поляков: приход в 19:50 (2025-07-07)
+2025-07-07 19:50:59,224 - werkzeug - INFO - 192.168.0.22 - - [07/Jul/2025 19:50:59] "POST /api/attendance HTTP/1.1" 200 -
+2025-07-07 19:51:04,858 - __main__ - INFO - Получены данные: {'serial': '992BEE97', 'time': '2025-07-07 19:51:03'}
+2025-07-07 19:51:04,861 - __main__ - INFO - Сотрудник: Поляков
+2025-07-07 19:51:04,878 - __main__ - INFO - Записано событие: уход для Поляков в 19:51
+2025-07-07 19:51:07,552 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7853971577:AAGjaqm1yeEpy1mY8sk7ll7bnDyS2_cLDGY/sendMessage "HTTP/1.1 200 OK"
+2025-07-07 19:51:07,554 - telegram_bot - INFO - Уведомление администратору отправлено: СКУД: Поляков: уход в 19:51 (2025-07-07)
+2025-07-07 19:51:07,566 - werkzeug - INFO - 192.168.0.22 - - [07/Jul/2025 19:51:07] "POST /api/attendance HTTP/1.1" 200 -
+2025-07-07 19:51:13,356 - __main__ - INFO - Получены данные: {'serial': '894046B8', 'time': '2025-07-07 19:51:11'}
+2025-07-07 19:51:13,358 - __main__ - INFO - Сотрудник: Тарасов
+2025-07-07 19:51:13,371 - __main__ - INFO - Записано событие: приход для Тарасов в 19:51
+2025-07-07 19:51:15,808 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7853971577:AAGjaqm1yeEpy1mY8sk7ll7bnDyS2_cLDGY/sendMessage "HTTP/1.1 200 OK"
+2025-07-07 19:51:15,809 - telegram_bot - INFO - Уведомление администратору отправлено: СКУД: Тарасов: приход в 19:51 (2025-07-07)
+2025-07-07 19:51:15,813 - werkzeug - INFO - 192.168.0.22 - - [07/Jul/2025 19:51:15] "POST /api/attendance HTTP/1.1" 200 -
+2025-07-07 19:51:24,818 - __main__ - INFO - Получены данные: {'serial': '894046B8', 'time': '2025-07-07 19:51:23'}
+2025-07-07 19:51:24,820 - __main__ - INFO - Сотрудник: Тарасов
+2025-07-07 19:51:24,833 - __main__ - INFO - Записано событие: уход для Тарасов в 19:51
+2025-07-07 19:51:27,447 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7853971577:AAGjaqm1yeEpy1mY8sk7ll7bnDyS2_cLDGY/sendMessage "HTTP/1.1 200 OK"
+2025-07-07 19:51:27,448 - telegram_bot - INFO - Уведомление администратору отправлено: СКУД: Тарасов: уход в 19:51 (2025-07-07)
+2025-07-07 19:51:27,454 - werkzeug - INFO - 192.168.0.22 - - [07/Jul/2025 19:51:27] "POST /api/attendance HTTP/1.1" 200 -
+2025-07-07 19:51:38,305 - __main__ - INFO - Получены данные: {'serial': 'E9DBA5A3', 'time': '2025-07-07 19:51:36'}
+2025-07-07 19:51:38,307 - __main__ - INFO - Сотрудник: Шура
+2025-07-07 19:51:38,323 - __main__ - INFO - Записано событие: приход для Шура в 19:51
+2025-07-07 19:51:41,695 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7853971577:AAGjaqm1yeEpy1mY8sk7ll7bnDyS2_cLDGY/sendMessage "HTTP/1.1 200 OK"
+2025-07-07 19:51:41,697 - telegram_bot - INFO - Уведомление администратору отправлено: СКУД: Шура: приход в 19:51 (2025-07-07)
+2025-07-07 19:51:41,714 - werkzeug - INFO - 192.168.0.22 - - [07/Jul/2025 19:51:41] "POST /api/attendance HTTP/1.1" 200 -
+2025-07-07 19:53:05,942 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:53:05] "[32mGET / HTTP/1.1[0m" 302 -
+2025-07-07 19:53:05,988 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:53:05] "GET /dashboard HTTP/1.1" 200 -
+2025-07-07 19:53:06,070 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:53:06] "GET /static/js/main.js HTTP/1.1" 200 -
+2025-07-07 19:53:06,072 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:53:06] "GET /static/css/style.css HTTP/1.1" 200 -
+2025-07-07 19:53:31,796 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:53:31] "GET /attendance HTTP/1.1" 200 -
+2025-07-07 19:53:31,844 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:53:31] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-07-07 19:53:31,871 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:53:31] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-07-07 19:53:42,760 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:53:42] "GET /employees HTTP/1.1" 200 -
+2025-07-07 19:53:42,825 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:53:42] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-07-07 19:53:42,829 - werkzeug - INFO - 127.0.0.1 - - [07/Jul/2025 19:53:42] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2025-07-07 19:54:14,168 - __main__ - INFO - Получены данные: {'serial': '08669221', 'time': '2025-07-07 19:54:11'}
+2025-07-07 19:54:14,171 - __main__ - WARNING - Неизвестный серийный номер: 08669221
+2025-07-07 19:54:20,161 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7853971577:AAGjaqm1yeEpy1mY8sk7ll7bnDyS2_cLDGY/sendMessage "HTTP/1.1 200 OK"
+2025-07-07 19:54:20,165 - telegram_bot - INFO - Уведомление администратору отправлено: СКУД: Обнаружена неизвестная карта: 08669221
+
+Для добавления сотрудника отправьте команду:
+/add_employee 08669221 Имя_Сотрудника
+2025-07-07 19:54:20,195 - werkzeug - INFO - 192.168.0.22 - - [07/Jul/2025 19:54:20] "[33mPOST /api/attendance HTTP/1.1[0m" 404 -

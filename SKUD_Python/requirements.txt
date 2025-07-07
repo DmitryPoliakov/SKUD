@@ -1,0 +1,7 @@
+flask==2.3.3
+pandas==2.0.3
+python-telegram-bot==20.4
+matplotlib==3.7.2
+seaborn==0.12.2
+xlsxwriter==3.1.2
+schedule==1.2.0 
