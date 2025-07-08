@@ -234,6 +234,9 @@ def reports():
     recent_reports.sort(key=lambda x: os.path.getmtime(os.path.join(reports_dir, x['filename'])), reverse=True)
     recent_reports = recent_reports[:5]  # Только последние 5 отчетов
     
+    # Проверяем, вызван ли эндпоинт из Telegram Web App
+    is_tg_webapp = request.args.get('tgWebApp') == '1'
+    
     return render_template('reports.html',
                           available_years=available_years,
                           months=months,
@@ -267,3 +270,48 @@ def download_report(filename):
 @app.route('/static/<path:path>')
 def send_static(path):
     return send_from_directory('static', path)
+
+# API для обработки данных от Telegram Web App
+@app.route('/api/telegram-webapp', methods=['POST'])
+def telegram_webapp():
+    try:
+        data = request.json
+        action = data.get('action')
+        
+        if action == 'generate_report':
+            year = data.get('year')
+            month = data.get('month')
+            report_type = data.get('report_type')
+            
+            # Здесь код для генерации отчета
+            # ...
+            
+            return jsonify({
+                'status': 'success',
+                'message': f'Отчет за {month}/{year} успешно сгенерирован',
+            })
+        
+        elif action == 'view_report':
+            report_url = data.get('report_url')
+            report_name = data.get('report_name')
+            
+            # Здесь код для обработки запроса на просмотр отчета
+            # ...
+            
+            return jsonify({
+                'status': 'success',
+                'message': f'Отчет {report_name} просмотрен',
+                'report_url': report_url
+            })
+        
+        else:
+            return jsonify({
+                'status': 'error',
+                'message': 'Неизвестное действие'
+            }), 400
+            
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500

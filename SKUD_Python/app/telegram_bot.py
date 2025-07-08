@@ -3,8 +3,9 @@
 
 import os
 import logging
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, ContextTypes
+import json
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
+from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, ContextTypes, MessageHandler, filters
 import pandas as pd
 from datetime import datetime, timedelta
 import calendar
@@ -32,6 +33,9 @@ REPORTS_DIR = os.path.join(DATA_DIR, 'reports')
 TELEGRAM_TOKEN = "7853971577:AAGjaqm1yeEpy1mY8sk7ll7bnDyS2_cLDGY"  # Токен пользователя
 ALLOWED_USERS = [42291783]  # Список ID пользователей, которым разрешен доступ
 ADMIN_USER_ID = 42291783  # ID администратора для уведомлений
+
+# URL веб-приложения
+WEBAPP_URL = "https://skud-ek.ru/reports?tgWebApp=1"
 
 # Убедимся, что директория для отчетов существует
 os.makedirs(REPORTS_DIR, exist_ok=True)
@@ -165,11 +169,38 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         logger.warning(f"Попытка доступа от неавторизованного пользователя: {user_id}")
         return
     
+    # Создаем клавиатуру с кнопками команд и Web App
+    keyboard = [
+        [InlineKeyboardButton("Отчеты через Web App", web_app=WebAppInfo(url=WEBAPP_URL))],
+        [InlineKeyboardButton("Отчет за текущий месяц", callback_data="menu_report")]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    
     await update.message.reply_text(
         "Добро пожаловать в бот системы СКУД!\n\n"
         "Доступные команды:\n"
         "• /report - получение отчета за текущий или предыдущий месяц\n"
-        "• /add_employee <серийный_номер> <имя> - добавление нового сотрудника"
+        "• /add_employee <серийный_номер> <имя> - добавление нового сотрудника\n"
+        "• /webapp - открыть отчеты через Web App",
+        reply_markup=reply_markup
+    )
+
+# Команда для открытия Web App
+async def webapp(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.effective_user.id
+    
+    if ALLOWED_USERS and user_id not in ALLOWED_USERS:
+        await update.message.reply_text("У вас нет доступа к этому боту.")
+        logger.warning(f"Попытка доступа от неавторизованного пользователя: {user_id}")
+        return
+    
+    # Создаем кнопку для открытия Web App
+    keyboard = [[InlineKeyboardButton("Открыть отчеты", web_app=WebAppInfo(url=WEBAPP_URL))]]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    
+    await update.message.reply_text(
+        "Нажмите кнопку для просмотра отчетов в Telegram Web App:",
+        reply_markup=reply_markup
     )
 
 # Команда для добавления нового сотрудника
@@ -245,6 +276,9 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
         [
             InlineKeyboardButton(f"Предыдущий месяц ({calendar.month_name[prev_month]})", 
                                 callback_data=f"report_{prev_year}_{prev_month}")
+        ],
+        [
+            InlineKeyboardButton("Открыть отчеты через Web App", web_app=WebAppInfo(url=WEBAPP_URL))
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -299,6 +333,74 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 photo=file,
                 caption=f"График отработанных часов за {period}"
             )
+    
+    elif data == "menu_report":
+        # Перенаправляем на команду report
+        await report(update, context)
+
+# Обработчик данных от Web App
+async def handle_webapp_data(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.effective_user.id
+    
+    if ALLOWED_USERS and user_id not in ALLOWED_USERS:
+        await update.message.reply_text("У вас нет доступа к этому боту.")
+        logger.warning(f"Попытка доступа от неавторизованного пользователя: {user_id}")
+        return
+    
+    try:
+        # Получаем данные от Web App
+        data = json.loads(update.effective_message.web_app_data.data)
+        logger.info(f"Получены данные от Web App: {data}")
+        
+        action = data.get('action')
+        
+        if action == 'generate_report':
+            year = data.get('year')
+            month = int(data.get('month'))
+            report_type = data.get('report_type')
+            
+            await update.message.reply_text(f"Генерация отчета за {calendar.month_name[month]} {year}...")
+            
+            # Генерируем отчет
+            excel_file, chart_file, period = generate_monthly_report(int(year), month)
+            
+            if excel_file is None:
+                await update.message.reply_text(f"Нет данных за {period}.")
+                return
+            
+            # Отправляем Excel-файл
+            with open(excel_file, 'rb') as file:
+                await context.bot.send_document(
+                    chat_id=update.effective_message.chat_id,
+                    document=file,
+                    filename=os.path.basename(excel_file),
+                    caption=f"Отчет посещаемости за {period}"
+                )
+            
+            # Отправляем график
+            with open(chart_file, 'rb') as file:
+                await context.bot.send_photo(
+                    chat_id=update.effective_message.chat_id,
+                    photo=file,
+                    caption=f"График отработанных часов за {period}"
+                )
+        
+        elif action == 'view_report':
+            report_url = data.get('report_url')
+            report_name = data.get('report_name')
+            
+            # Отправляем ссылку на отчет
+            await update.message.reply_text(
+                f"Вы выбрали отчет: {report_name}\n"
+                f"Скачать можно по ссылке: {report_url}"
+            )
+        
+        else:
+            await update.message.reply_text(f"Неизвестное действие: {action}")
+    
+    except Exception as e:
+        logger.error(f"Ошибка при обработке данных от Web App: {str(e)}")
+        await update.message.reply_text(f"Произошла ошибка при обработке данных: {str(e)}")
 
 # Запуск бота
 def main():
@@ -314,7 +416,11 @@ def main():
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("report", report))
     application.add_handler(CommandHandler("add_employee", add_employee))
+    application.add_handler(CommandHandler("webapp", webapp))
     application.add_handler(CallbackQueryHandler(button_callback))
+    
+    # Обработчик данных от Web App
+    application.add_handler(MessageHandler(filters.StatusUpdate.WEB_APP_DATA, handle_webapp_data))
     
     # Запускаем бота
     logger.info("Запуск телеграм-бота СКУД")

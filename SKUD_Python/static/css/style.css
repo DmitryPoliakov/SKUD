@@ -2,6 +2,7 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 .footer {
@@ -38,4 +39,82 @@ body {
 
 .table {
     margin-bottom: 0;
+}
+
+/* Telegram Web App стили */
+:root {
+    --tg-theme-bg-color: #ffffff;
+    --tg-theme-text-color: #222222;
+    --tg-theme-hint-color: #999999;
+    --tg-theme-link-color: #2678b6;
+    --tg-theme-button-color: #50a8eb;
+    --tg-theme-button-text-color: #ffffff;
+}
+
+body.tg-webapp {
+    background-color: var(--tg-theme-bg-color);
+    color: var(--tg-theme-text-color);
+}
+
+body.tg-webapp h1,
+body.tg-webapp h2,
+body.tg-webapp h3,
+body.tg-webapp h4,
+body.tg-webapp h5,
+body.tg-webapp h6 {
+    color: var(--tg-theme-text-color);
+}
+
+body.tg-webapp .card {
+    background-color: var(--tg-theme-bg-color);
+    border-color: var(--tg-theme-hint-color);
+}
+
+body.tg-webapp .card-header {
+    background-color: rgba(0, 0, 0, 0.05);
+    border-color: var(--tg-theme-hint-color);
+}
+
+body.tg-webapp .btn-primary {
+    background-color: var(--tg-theme-button-color);
+    border-color: var(--tg-theme-button-color);
+    color: var(--tg-theme-button-text-color);
+}
+
+body.tg-webapp .btn-outline-primary {
+    border-color: var(--tg-theme-button-color);
+    color: var(--tg-theme-button-color);
+}
+
+body.tg-webapp a {
+    color: var(--tg-theme-link-color);
+}
+
+/* Адаптация для мобильных устройств */
+@media (max-width: 768px) {
+    .card {
+        margin-bottom: 1rem;
+    }
+    
+    .container {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    
+    h1 {
+        font-size: 1.5rem;
+    }
+    
+    h5 {
+        font-size: 1.1rem;
+    }
+}
+
+/* Дополнительные стили для приложения */
+.list-group-item {
+    transition: background-color 0.2s;
+}
+
+.list-group-item:hover {
+    background-color: rgba(0, 0, 0, 0.03);
 }

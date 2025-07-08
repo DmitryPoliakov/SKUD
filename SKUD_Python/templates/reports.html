@@ -2,6 +2,10 @@
 
 {% block title %}Отчеты | СКУД{% endblock %}
 
+{% block head %}
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+{% endblock %}
+
 {% block content %}
 <h1 class="mb-4">Отчеты</h1>
 
@@ -12,7 +16,7 @@
                 <h5>Генерация отчета</h5>
             </div>
             <div class="card-body">
-                <form action="{{ url_for('generate_report') }}" method="post">
+                <form action="{{ url_for('generate_report') }}" method="post" id="reportForm">
                     <div class="mb-3">
                         <label for="report_year" class="form-label">Год</label>
                         <select class="form-select" id="report_year" name="year" required>
@@ -53,7 +57,7 @@
                     {% for report in recent_reports %}
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <span>{{ report.name }}</span>
-                        <a href="{{ url_for('download_report', filename=report.filename) }}" class="btn btn-sm btn-outline-primary">Скачать</a>
+                        <a href="{{ url_for('download_report', filename=report.filename) }}" class="btn btn-sm btn-outline-primary report-download-btn">Скачать</a>
                     </li>
                     {% endfor %}
                 </ul>
@@ -82,6 +86,7 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="{{ url_for('static', filename='js/telegram-webapp.js') }}"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // График среднего времени прихода по дням недели
