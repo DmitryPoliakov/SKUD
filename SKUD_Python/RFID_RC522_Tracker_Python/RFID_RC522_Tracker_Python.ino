@@ -30,12 +30,16 @@
 #include <ArduinoJson.h>
 #include <SPI.h>
 #include <MFRC522.h>
+#include <ESPmDNS.h>
+#include <WiFiUdp.h>
+#include <ArduinoOTA.h>
 
 // Настройки режима работы
 #define LOCAL_MODE 0  // 1 - локальный режим без отправки данных, 0 - отправка данных на сервер
 
 // Настройки светодиодной индикации
-#define STANDBY_BRIGHTNESS 10  // 30% от 255 для режима ожидания
+#define STANDBY_BRIGHTNESS 12  // 30% от 255 для режима ожидания
+#define ERROR_BLINK_INTERVAL 500  // Интервал мигания красного светодиода при ошибке (мс)
 
 // WiFi settings
 const char* primary_ssid = "treestene";
@@ -119,6 +123,34 @@ void setup() {
     Serial.println(WiFi.localIP());
     configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
     Serial.println("Time synchronized");
+    
+    // Инициализация OTA
+    ArduinoOTA.setHostname("SKUD-ESP32"); // Установка имени устройства в сети для OTA
+    ArduinoOTA
+      .onStart([]() {
+        String type;
+        if (ArduinoOTA.getCommand() == U_FLASH)
+          type = "sketch";
+        else // U_SPIFFS
+          type = "filesystem";
+        Serial.println("Start updating " + type);
+      })
+      .onEnd([]() {
+        Serial.println("\nEnd");
+      })
+      .onProgress([](unsigned int progress, unsigned int total) {
+        Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
+      })
+      .onError([](ota_error_t error) {
+        Serial.printf("Error[%u]: ", error);
+        if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
+        else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
+        else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
+        else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
+        else if (error == OTA_END_ERROR) Serial.println("End Failed");
+      });
+    ArduinoOTA.begin();
+    Serial.println("OTA initialized with hostname: SKUD-ESP32");
   } else {
     Serial.println("Не удалось подключиться ни к одной сети WiFi!");
   }
@@ -131,11 +163,51 @@ void loop() {
   
   // Код для RC522 (13.56 МГц)
   static unsigned long lastDebugTime = 0;
+  static unsigned long lastErrorBlinkTime = 0;
+  static bool errorLedState = false;
+  
   if (millis() - lastDebugTime > 5000) {
     lastDebugTime = millis();
     Serial.println("Checking RC522 status...");
-    // Убедимся, что светодиод ожидания включен
-    analogWrite(GREEN_LED_PIN, STANDBY_BRIGHTNESS);
+    // Проверяем состояние считывателя
+    byte version = rfid.PCD_ReadRegister(rfid.VersionReg);
+    if (version == 0x00 || version == 0xFF) {
+      Serial.println("ERROR: RFID reader not responding or not connected!");
+      // Мигаем красным для индикации проблемы со считывателем
+      if (millis() - lastErrorBlinkTime > ERROR_BLINK_INTERVAL) {
+        lastErrorBlinkTime = millis();
+        errorLedState = !errorLedState;
+        digitalWrite(RED_LED_PIN, errorLedState ? HIGH : LOW);
+        analogWrite(GREEN_LED_PIN, 0);
+      }
+    } else {
+      Serial.print("RFID reader version: 0x");
+      Serial.println(version, HEX);
+      // Убедимся, что светодиод ожидания включен, если нет ошибок
+      if (WiFi.status() == WL_CONNECTED) {
+        struct tm timeinfo;
+        if (getLocalTime(&timeinfo)) {
+          analogWrite(GREEN_LED_PIN, STANDBY_BRIGHTNESS);
+          digitalWrite(RED_LED_PIN, LOW);
+        } else {
+          // Нет синхронизации времени - мигаем красным
+          if (millis() - lastErrorBlinkTime > ERROR_BLINK_INTERVAL) {
+            lastErrorBlinkTime = millis();
+            errorLedState = !errorLedState;
+            digitalWrite(RED_LED_PIN, errorLedState ? HIGH : LOW);
+            analogWrite(GREEN_LED_PIN, 0);
+          }
+        }
+      } else {
+        // Нет WiFi - мигаем красным
+        if (millis() - lastErrorBlinkTime > ERROR_BLINK_INTERVAL) {
+          lastErrorBlinkTime = millis();
+          errorLedState = !errorLedState;
+          digitalWrite(RED_LED_PIN, errorLedState ? HIGH : LOW);
+          analogWrite(GREEN_LED_PIN, 0);
+        }
+      }
+    }
   }
 
   cardDetected = rfid.PICC_IsNewCardPresent() && rfid.PICC_ReadCardSerial();
@@ -155,11 +227,15 @@ void loop() {
   // Общий код для обработки карты
   if (cardDetected && serial.length() > 0) {
     // Получение текущего времени
-    struct tm timeinfo;
-    if (WiFi.status() != WL_CONNECTED || !getLocalTime(&timeinfo)) {
-      Serial.println("Не удалось получить время или WiFi не подключен");
-      return;
-    }
+  struct tm timeinfo;
+  if (WiFi.status() != WL_CONNECTED || !getLocalTime(&timeinfo)) {
+    Serial.println("Не удалось получить время или WiFi не подключен");
+    // Индикация ошибки - мигаем красным
+    fadeInOut(RED_LED_PIN, 2, FADE_DELAY_FAST);
+    // Возвращаем зелёный светодиод в режим ожидания
+    analogWrite(GREEN_LED_PIN, STANDBY_BRIGHTNESS);
+    return;
+  }
     char timeStr[20];
     strftime(timeStr, sizeof(timeStr), "%Y-%m-%d %H:%M:%S", &timeinfo);
 
@@ -232,6 +308,9 @@ void loop() {
       }
     }
   }
+  
+  // Обработка OTA обновлений
+  ArduinoOTA.handle();
   
   delay(100); // Уменьшаем задержку перед следующим чтением
 }
@@ -336,4 +415,4 @@ String sendToPythonServer(String serial, String time) {
   
   http.end();
   return response;
-} 
+}
