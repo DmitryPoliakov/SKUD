@@ -389,11 +389,26 @@ async def handle_webapp_data(update: Update, context: ContextTypes.DEFAULT_TYPE)
             report_url = data.get('report_url')
             report_name = data.get('report_name')
             
-            # Отправляем ссылку на отчет
-            await update.message.reply_text(
-                f"Вы выбрали отчет: {report_name}\n"
-                f"Скачать можно по ссылке: {report_url}"
-            )
+            # Извлекаем имя файла из URL
+            filename = report_name.strip()
+            reports_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'reports')
+            file_path = os.path.join(reports_dir, filename)
+            
+            if os.path.exists(file_path):
+                # Отправляем файл пользователю
+                with open(file_path, 'rb') as file:
+                    await context.bot.send_document(
+                        chat_id=update.effective_message.chat_id,
+                        document=file,
+                        filename=filename,
+                        caption=f"Отчет: {filename}"
+                    )
+            else:
+                # Если файл не найден, отправляем ссылку
+                await update.message.reply_text(
+                    f"Вы выбрали отчет: {report_name}\n"
+                    f"Скачать можно по ссылке: {report_url}"
+                )
         
         else:
             await update.message.reply_text(f"Неизвестное действие: {action}")

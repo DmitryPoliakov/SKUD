@@ -41,7 +41,10 @@
                             <option value="csv">CSV</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary">Сгенерировать отчет</button>
+                    <button type="submit" class="btn btn-primary generate-report-btn">
+                        Сгенерировать отчет
+                        <span class="loading-indicator"></span>
+                    </button>
                 </form>
             </div>
         </div>
@@ -57,7 +60,10 @@
                     {% for report in recent_reports %}
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <span>{{ report.name }}</span>
-                        <a href="{{ url_for('download_report', filename=report.filename) }}" class="btn btn-sm btn-outline-primary report-download-btn">Скачать</a>
+                        <a href="{{ url_for('download_report', filename=report.filename) }}" class="btn btn-sm btn-outline-primary report-download-btn" data-report-name="{{ report.name }}">
+                            Скачать
+                            <span class="loading-indicator"></span>
+                        </a>
                     </li>
                     {% endfor %}
                 </ul>
@@ -89,6 +95,34 @@
 <script src="{{ url_for('static', filename='js/telegram-webapp.js') }}"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Добавляем обработчик для кнопок скачивания
+        const downloadButtons = document.querySelectorAll('.report-download-btn');
+        downloadButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const loadingIndicator = this.querySelector('.loading-indicator');
+                if (loadingIndicator) {
+                    loadingIndicator.style.display = 'inline-block';
+                }
+                // Через 2 секунды скрываем индикатор (достаточно времени для начала скачивания)
+                setTimeout(() => {
+                    if (loadingIndicator) {
+                        loadingIndicator.style.display = 'none';
+                    }
+                }, 2000);
+            });
+        });
+
+        // Добавляем обработчик для формы генерации отчета
+        const reportForm = document.getElementById('reportForm');
+        if (reportForm) {
+            reportForm.addEventListener('submit', function() {
+                const loadingIndicator = document.querySelector('.generate-report-btn .loading-indicator');
+                if (loadingIndicator) {
+                    loadingIndicator.style.display = 'inline-block';
+                }
+            });
+        }
+
         // График среднего времени прихода по дням недели
         const weekdayCtx = document.getElementById('weekdayArrivalChart').getContext('2d');
         new Chart(weekdayCtx, {

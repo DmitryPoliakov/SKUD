@@ -94,12 +94,14 @@ function setupReportButtons() {
     
     reportButtons.forEach(button => {
         button.addEventListener('click', function(e) {
-            // Проверяем, запущено ли приложение в Telegram Web App
+            const reportUrl = this.getAttribute('href');
+            const reportName = this.parentElement.querySelector('span').innerText;
+            
+            console.log("Клик по кнопке скачивания:", reportName);
+            
+            // Если запущено в Telegram Web App, отправляем данные боту
             if (tgApp) {
-                e.preventDefault();
-                
-                const reportUrl = this.getAttribute('href');
-                const reportName = this.parentElement.querySelector('span').innerText;
+                console.log("Отправка данных в Telegram Web App");
                 
                 // Отправляем данные о выбранном отчете обратно в бот
                 tgApp.sendData(JSON.stringify({
@@ -107,8 +109,12 @@ function setupReportButtons() {
                     report_url: window.location.origin + reportUrl,
                     report_name: reportName
                 }));
+                
+                // Открываем файл в новой вкладке
+                window.open(reportUrl, '_blank');
             }
-            // Если не в Telegram Web App, позволяем обычное скачивание (не вызываем preventDefault)
+            
+            // Не используем preventDefault, чтобы стандартное поведение ссылки также работало
         });
     });
     
@@ -116,14 +122,16 @@ function setupReportButtons() {
     const reportForm = document.querySelector('form[action*="generate_report"]');
     if (reportForm) {
         reportForm.addEventListener('submit', function(e) {
-            // Перехватываем форму только если запущено в Telegram Web App
+            console.log("Отправка формы генерации отчета");
+            
+            const formData = new FormData(this);
+            const year = formData.get('year');
+            const month = formData.get('month');
+            const reportType = formData.get('report_type');
+            
+            // Если запущено в Telegram Web App, отправляем данные боту
             if (tgApp) {
-                e.preventDefault();
-                
-                const formData = new FormData(this);
-                const year = formData.get('year');
-                const month = formData.get('month');
-                const reportType = formData.get('report_type');
+                console.log("Отправка данных генерации отчета в Telegram Web App");
                 
                 // Отправляем данные о запросе генерации отчета обратно в бот
                 tgApp.sendData(JSON.stringify({
@@ -133,6 +141,8 @@ function setupReportButtons() {
                     report_type: reportType
                 }));
             }
+            
+            // Не используем preventDefault, форма будет отправлена обычным способом
         });
     }
 } 
