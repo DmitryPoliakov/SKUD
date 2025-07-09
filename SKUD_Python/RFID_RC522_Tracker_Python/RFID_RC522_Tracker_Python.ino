@@ -42,10 +42,10 @@
 #define ERROR_BLINK_INTERVAL 500  // Интервал мигания красного светодиода при ошибке (мс)
 
 // WiFi settings
-const char* primary_ssid = "treestene";
-const char* primary_password = "89028701826";
-const char* backup_ssid = "TP-link";
-const char* backup_password = "4722027";
+const char* primary_ssid = "TP-Link_6D5C";
+const char* primary_password = "70277029";
+const char* backup_ssid = "treestene";
+const char* backup_password = "89028701826";
 
 // Python API URL - IP-адрес вашего сервера
 const char* serverURL = "http://194.87.43.42/api/attendance";
