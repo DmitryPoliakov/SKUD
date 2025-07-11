@@ -215,14 +215,45 @@ def record_attendance():
             'message': f'Внутренняя ошибка сервера: {str(e)}'
         }), 500
 
-# Маршрут для проверки работоспособности API
+# API для проверки работоспособности
 @app.route('/api/health', methods=['GET'])
 def health_check():
     return jsonify({
         'status': 'ok',
-        'message': 'СКУД API работает нормально',
-        'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        'timestamp': datetime.now().isoformat(),
+        'message': 'Система СКУД работает нормально'
     })
+
+# API для получения текущей статистики (для обновления в реальном времени)
+@app.route('/api/current-stats', methods=['GET'])
+def current_stats():
+    try:
+        # Загружаем данные посещаемости
+        df = load_attendance_data()
+        
+        # Текущая дата
+        today = datetime.now().strftime('%Y-%m-%d')
+        
+        # Загружаем список сотрудников
+        employees = load_employees()
+        
+        # Фильтруем записи за сегодня
+        today_records = df[df['date'] == today]
+        
+        # Считаем присутствующих (есть приход, но нет ухода)
+        today_present = len(today_records[pd.notna(today_records['arrival']) & pd.isna(today_records['departure'])])
+        
+        return jsonify({
+            'today_present': today_present,
+            'total_employees': len(employees),
+            'timestamp': datetime.now().isoformat()
+        })
+    except Exception as e:
+        logger.error(f"Ошибка при получении текущей статистики: {str(e)}")
+        return jsonify({
+            'error': 'Ошибка при получении статистики',
+            'timestamp': datetime.now().isoformat()
+        }), 500
 
 # Маршрут для главной страницы (панель управления)
 @app.route('/dashboard')
@@ -496,6 +527,86 @@ def reports():
                               employee_hours_data=employee_hours_data)
     except Exception as e:
         logger.exception(f"Критическая ошибка в функции reports(): {str(e)}")
+        return f"Ошибка при загрузке страницы отчетов: {str(e)}", 500
+
+# Маршрут для Telegram Web App отчетов
+@app.route('/telegram-reports')
+def telegram_reports():
+    try:
+        # Добавляем отладочную информацию
+        logger.info("Запуск функции telegram_reports()")
+        
+        # Загружаем данные посещаемости
+        df = load_attendance_data()
+        logger.info(f"Загружено записей посещаемости: {len(df)}")
+        
+        # Текущая дата
+        today = datetime.now().strftime('%Y-%m-%d')
+        
+        # Загружаем список сотрудников
+        employees = load_employees()
+        
+        # Фильтруем записи за сегодня
+        today_records = df[df['date'] == today]
+        
+        # Считаем присутствующих (есть приход, но нет ухода)
+        today_present = len(today_records[pd.notna(today_records['arrival']) & pd.isna(today_records['departure'])])
+        
+        # Получаем список доступных лет
+        available_years = []
+        if not df.empty:
+            available_years = sorted(df['date'].str[:4].unique().tolist())
+        if not available_years:
+            available_years = [str(datetime.now().year)]
+        logger.info(f"Доступные годы: {available_years}")
+        
+        # Словарь месяцев на русском языке
+        months = {
+            1: "Январь",
+            2: "Февраль",
+            3: "Март",
+            4: "Апрель",
+            5: "Май",
+            6: "Июнь",
+            7: "Июль",
+            8: "Август",
+            9: "Сентябрь",
+            10: "Октябрь",
+            11: "Ноябрь",
+            12: "Декабрь"
+        }
+        
+        # Получаем список последних отчетов
+        reports_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'reports')
+        os.makedirs(reports_dir, exist_ok=True)
+        
+        recent_reports = []
+        try:
+            for filename in os.listdir(reports_dir):
+                if filename.endswith('.xlsx') or filename.endswith('.pdf') or filename.endswith('.csv'):
+                    file_path = os.path.join(reports_dir, filename)
+                    recent_reports.append({
+                        'name': filename,
+                        'filename': filename
+                    })
+            
+            # Сортируем отчеты по времени создания (новые в начале)
+            recent_reports.sort(key=lambda x: os.path.getmtime(os.path.join(reports_dir, x['filename'])), reverse=True)
+            recent_reports = recent_reports[:5]  # Только последние 5 отчетов
+            logger.info(f"Найдено отчетов: {len(recent_reports)}")
+        except Exception as e:
+            logger.error(f"Ошибка при получении списка отчетов: {str(e)}")
+        
+        logger.info(f"Присутствующих сотрудников: {today_present}")
+        
+        return render_template('telegram-reports.html',
+                              available_years=available_years,
+                              months=months,
+                              recent_reports=recent_reports,
+                              today_present=today_present,
+                              total_employees=len(employees))
+    except Exception as e:
+        logger.exception(f"Критическая ошибка в функции telegram_reports(): {str(e)}")
         return f"Ошибка при загрузке страницы отчетов: {str(e)}", 500
 
 # Маршрут для генерации отчета

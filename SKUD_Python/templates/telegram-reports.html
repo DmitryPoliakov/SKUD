@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+
+{% block title %}Отчеты СКУД | Telegram{% endblock %}
+
+{% block head %}
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="tg-webapp-container">
+    <h1 class="mb-4">Отчеты СКУД</h1>
+
+    <!-- Информация о присутствующих -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5>Текущая статистика</h5>
+        </div>
+        <div class="card-body">
+            <div class="row text-center">
+                <div class="col-6">
+                    <div class="stat-card p-3 rounded">
+                        <h3 class="text-success">{{ today_present }}</h3>
+                        <p class="mb-0">Присутствующих</p>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="stat-card p-3 rounded">
+                        <h3 class="text-primary">{{ total_employees }}</h3>
+                        <p class="mb-0">Всего сотрудников</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Генерация отчета</h5>
+                </div>
+                <div class="card-body">
+                    <form action="{{ url_for('generate_report') }}" method="post" id="reportForm">
+                        <div class="mb-3">
+                            <label for="report_year" class="form-label">Год</label>
+                            <select class="form-select" id="report_year" name="year" required>
+                                {% for year in available_years %}
+                                <option value="{{ year }}">{{ year }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="report_month" class="form-label">Месяц</label>
+                            <select class="form-select" id="report_month" name="month" required>
+                                {% for month_num, month_name in months.items() %}
+                                <option value="{{ month_num }}">{{ month_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="report_type" class="form-label">Тип отчета</label>
+                            <select class="form-select" id="report_type" name="report_type" required>
+                                <option value="excel">Excel</option>
+                                <option value="pdf">PDF</option>
+                                <option value="csv">CSV</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 generate-report-btn">
+                            Сгенерировать отчет
+                            <span class="loading-indicator" style="display: none;">
+                                <span class="spinner-border spinner-border-sm ms-2" role="status"></span>
+                            </span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Последние отчеты</h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_reports %}
+                    <div class="list-group">
+                        {% for report in recent_reports %}
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="text-truncate">{{ report.name }}</span>
+                            <a href="{{ url_for('download_report', filename=report.filename) }}" 
+                               class="btn btn-sm btn-outline-primary report-download-btn ms-2" 
+                               data-report-name="{{ report.name }}">
+                                Скачать
+                                <span class="loading-indicator" style="display: none;">
+                                    <span class="spinner-border spinner-border-sm ms-1" role="status"></span>
+                                </span>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-muted">Отчеты не найдены</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Дополнительные стили для Telegram Web App */
+.tg-webapp-container {
+    padding-bottom: 80px; /* Место для кнопки закрытия */
+}
+
+.stat-card {
+    background-color: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.loading-indicator {
+    display: none;
+}
+
+.text-truncate {
+    max-width: 200px;
+}
+
+/* Адаптация для Telegram Web App */
+body.tg-webapp .tg-webapp-container {
+    max-width: 100%;
+}
+
+body.tg-webapp .card {
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+body.tg-webapp .btn-primary {
+    border-radius: 8px;
+    padding: 10px 16px;
+}
+
+body.tg-webapp .form-select {
+    border-radius: 8px;
+    border: 1px solid var(--tg-theme-hint-color);
+}
+
+body.tg-webapp .list-group-item {
+    border-radius: 8px !important;
+    border: 1px solid var(--tg-theme-hint-color) !important;
+    margin-bottom: 8px;
+}
+
+body.tg-webapp .list-group-item:last-child {
+    margin-bottom: 0;
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/telegram-webapp.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Добавляем обработчик для кнопок скачивания
+        const downloadButtons = document.querySelectorAll('.report-download-btn');
+        downloadButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const loadingIndicator = this.querySelector('.loading-indicator');
+                if (loadingIndicator) {
+                    loadingIndicator.style.display = 'inline-block';
+                }
+                // Через 2 секунды скрываем индикатор
+                setTimeout(() => {
+                    if (loadingIndicator) {
+                        loadingIndicator.style.display = 'none';
+                    }
+                }, 2000);
+            });
+        });
+
+        // Добавляем обработчик для формы генерации отчета
+        const reportForm = document.getElementById('reportForm');
+        if (reportForm) {
+            reportForm.addEventListener('submit', function() {
+                const loadingIndicator = document.querySelector('.generate-report-btn .loading-indicator');
+                if (loadingIndicator) {
+                    loadingIndicator.style.display = 'inline-block';
+                }
+            });
+        }
+
+        // Обновляем статистику каждые 30 секунд
+        setInterval(function() {
+            fetch('/api/current-stats')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.today_present !== undefined) {
+                        document.querySelector('.text-success').textContent = data.today_present;
+                    }
+                })
+                .catch(error => console.log('Ошибка при обновлении статистики:', error));
+        }, 30000);
+    });
+</script>
+{% endblock %} 

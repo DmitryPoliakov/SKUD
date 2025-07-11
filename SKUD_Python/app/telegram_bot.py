@@ -35,7 +35,7 @@ ALLOWED_USERS = [42291783]  # Список ID пользователей, кот
 ADMIN_USER_ID = 42291783  # ID администратора для уведомлений
 
 # URL веб-приложения
-WEBAPP_URL = "https://skud-ek.ru/reports?tgWebApp=1"
+WEBAPP_URL = "https://skud-ek.ru/telegram-reports?tgWebApp=1"
 
 # Убедимся, что директория для отчетов существует
 os.makedirs(REPORTS_DIR, exist_ok=True)
