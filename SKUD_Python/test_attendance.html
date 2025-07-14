@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест СКУД - Имитация считывателя</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 50px; 
+            background-color: #f5f5f5;
+        }
+        .container { 
+            max-width: 600px; 
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label { 
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input, select, button { 
+            padding: 12px; 
+            margin: 5px 0; 
+            width: 100%; 
+            box-sizing: border-box;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        select {
+            cursor: pointer;
+        }
+        button { 
+            background-color: #007bff; 
+            color: white; 
+            border: none; 
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        button:hover { 
+            background-color: #0056b3; 
+        }
+        .send-button {
+            background-color: #28a745;
+            font-size: 16px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        .send-button:hover {
+            background-color: #218838;
+        }
+        .result { 
+            margin-top: 20px; 
+            padding: 15px; 
+            background-color: #f8f9fa; 
+            border: 2px solid #dee2e6;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success { 
+            background-color: #d4edda; 
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        .error { 
+            background-color: #f8d7da; 
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        .info {
+            background-color: #e7f3ff;
+            border: 2px solid #b3d9ff;
+            color: #0066cc;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .employee-info {
+            background-color: #f0f8ff;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔑 Тест СКУД - Имитация считывателя</h1>
+        
+                 <div class="info">
+             <strong>ℹ️ Информация:</strong><br>
+             Эта страница имитирует отправку данных от RFID считывателя RC522 на сервер.<br>
+             Адрес сервера: <code>https://skud-ek.ru/api/attendance</code>
+         </div>
+        
+        <div class="form-group">
+            <label for="employee">👤 Выберите сотрудника:</label>
+            <select id="employee" onchange="updateEmployeeInfo()">
+                <option value="">-- Выберите сотрудника --</option>
+                <option value="E9DBA5A3">Шура</option>
+                <option value="992BEE97">Поляков Павел</option>
+                <option value="894046B8">Тарасов Никита</option>
+                <option value="92C2001D">Поляков Дмитрий</option>
+                <option value="296DD1A3">Пущинский Марк</option>
+                <option value="32AABBD6">Поляков Павел (карта 2)</option>
+                <option value="E79DF8A4">Карта МИР 4635</option>
+                <option value="0A711B71">Карта Прокатут</option>
+                <option value="083BD5D8">ЦУМ</option>
+            </select>
+            <div id="employeeInfo" class="employee-info" style="display: none;"></div>
+        </div>
+        
+        <div class="form-group">
+            <label for="time">🕐 Время события (YYYY-MM-DD HH:MM:SS):</label>
+            <input type="text" id="time" placeholder="2025-01-28 16:30:00">
+            <button type="button" onclick="setCurrentTime()" style="width: auto; display: inline-block; margin-left: 10px; padding: 8px 15px;">
+                Текущее время
+            </button>
+        </div>
+        
+        <button class="send-button" onclick="sendAttendance()">
+            🚀 Отправить посылку на сервер
+        </button>
+        
+        <div id="result" class="result" style="display: none;"></div>
+        
+        <div style="margin-top: 30px; text-align: center; color: #666; font-size: 12px;">
+            <p>Система автоматически определит тип события (приход/уход) на основе существующих записей за день</p>
+        </div>
+    </div>
+
+    <script>
+        // Данные сотрудников (серийный номер -> имя)
+        const employees = {
+            "E9DBA5A3": "Шура",
+            "992BEE97": "Поляков Павел", 
+            "894046B8": "Тарасов Никита",
+            "92C2001D": "Поляков Дмитрий",
+            "296DD1A3": "Пущинский Марк",
+            "32AABBD6": "Поляков Павел (карта 2)",
+            "E79DF8A4": "Карта МИР 4635",
+            "0A711B71": "Карта Прокатут", 
+            "083BD5D8": "ЦУМ"
+        };
+        
+        // Автоматически устанавливаем текущее время при загрузке
+        function setCurrentTime() {
+            const now = new Date();
+            const timeString = now.getFullYear() + '-' + 
+                String(now.getMonth() + 1).padStart(2, '0') + '-' + 
+                String(now.getDate()).padStart(2, '0') + ' ' + 
+                String(now.getHours()).padStart(2, '0') + ':' + 
+                String(now.getMinutes()).padStart(2, '0') + ':' + 
+                String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('time').value = timeString;
+        }
+        
+        // Обновляем информацию о выбранном сотруднике
+        function updateEmployeeInfo() {
+            const select = document.getElementById('employee');
+            const infoDiv = document.getElementById('employeeInfo');
+            
+            if (select.value) {
+                const employeeName = employees[select.value];
+                infoDiv.innerHTML = `<strong>Серийный номер карты:</strong> ${select.value}<br><strong>Имя сотрудника:</strong> ${employeeName}`;
+                infoDiv.style.display = 'block';
+            } else {
+                infoDiv.style.display = 'none';
+            }
+        }
+        
+        // Устанавливаем текущее время при загрузке страницы
+        setCurrentTime();
+        
+        // Отладочная информация при загрузке
+        console.log('🔍 DEBUG: Страница загружена');
+        console.log('🔍 DEBUG: Protocol:', window.location.protocol);
+        console.log('🔍 DEBUG: Host:', window.location.host);
+        console.log('🔍 DEBUG: Origin:', window.location.origin);
+        console.log('🔍 DEBUG: User Agent:', navigator.userAgent);
+        console.log('🔍 DEBUG: Онлайн:', navigator.onLine);
+        
+        // Проверяем доступность функций
+        console.log('🔍 DEBUG: fetch доступен:', typeof fetch !== 'undefined');
+        console.log('🔍 DEBUG: JSON доступен:', typeof JSON !== 'undefined');
+        
+        // Тестируем простой запрос для проверки CORS
+        console.log('🔍 DEBUG: Тестируем CORS политику...');
+        fetch('https://skud-ek.ru/api/health', { method: 'GET' })
+            .then(response => {
+                console.log('🔍 DEBUG: Health check успешен, CORS работает');
+                console.log('🔍 DEBUG: Health response status:', response.status);
+            })
+            .catch(error => {
+                console.log('🔍 DEBUG: Health check неудачен');
+                console.log('🔍 DEBUG: Health error:', error.message);
+                if (error.message.includes('Failed to fetch')) {
+                    console.log('🔍 DEBUG: CORS блокирует даже GET запросы');
+                }
+            });
+        
+        function sendAttendance() {
+            const employeeSelect = document.getElementById('employee');
+            const timeInput = document.getElementById('time');
+            
+            const serial = employeeSelect.value;
+            const time = timeInput.value;
+            
+            if (!serial) {
+                showResult('❌ Пожалуйста, выберите сотрудника', 'error');
+                return;
+            }
+            
+            if (!time) {
+                showResult('❌ Пожалуйста, укажите время', 'error');
+                return;
+            }
+            
+            // Проверяем формат времени
+            const timeRegex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
+            if (!timeRegex.test(time)) {
+                showResult('❌ Неправильный формат времени. Используйте: YYYY-MM-DD HH:MM:SS', 'error');
+                return;
+            }
+            
+            const employeeName = employees[serial];
+            sendToServer(serial, time, employeeName);
+        }
+        
+        function sendToServer(serial, time, employeeName) {
+            const data = {
+                serial: serial,
+                time: time
+            };
+            
+            // Детальная отладка
+            console.log('🔍 DEBUG: Начинаем отправку данных');
+            console.log('🔍 DEBUG: URL:', 'https://skud-ek.ru/api/attendance');
+            console.log('🔍 DEBUG: Метод:', 'POST');
+            console.log('🔍 DEBUG: Данные:', data);
+            console.log('🔍 DEBUG: JSON:', JSON.stringify(data));
+            console.log('🔍 DEBUG: User Agent:', navigator.userAgent);
+            console.log('🔍 DEBUG: Браузер поддерживает fetch:', typeof fetch !== 'undefined');
+            
+            showResult(`⏳ Отправка данных для ${employeeName}...`, '');
+            
+            // Сначала проверим доступность сервера простым запросом
+            console.log('🔍 DEBUG: Проверяем доступность сервера...');
+            
+            // Отправляем на реальный сервер
+            console.log('🔍 DEBUG: Выполняем fetch запрос...');
+            fetch('https://skud-ek.ru/api/attendance', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                console.log('🔍 DEBUG: Получен ответ от сервера');
+                console.log('🔍 DEBUG: Response status:', response.status);
+                console.log('🔍 DEBUG: Response statusText:', response.statusText);
+                console.log('🔍 DEBUG: Response headers:', [...response.headers.entries()]);
+                console.log('🔍 DEBUG: Response ok:', response.ok);
+                console.log('🔍 DEBUG: Response type:', response.type);
+                console.log('🔍 DEBUG: Response url:', response.url);
+                
+                if (!response.ok) {
+                    console.log('🔍 DEBUG: Response не OK, выбрасываем ошибку');
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                console.log('🔍 DEBUG: Парсим JSON...');
+                return response.json();
+            })
+            .then(data => {
+                console.log('🔍 DEBUG: JSON успешно распарсен');
+                console.log('🔍 DEBUG: Данные ответа:', data);
+                console.log('🔍 DEBUG: Тип данных:', typeof data);
+                console.log('🔍 DEBUG: Статус в данных:', data.status);
+                
+                if (data.status === 'success') {
+                    console.log('🔍 DEBUG: Обрабатываем успешный ответ');
+                    const message = `✅ <strong>Успешно!</strong><br>
+                        Сотрудник: <strong>${data.employee}</strong><br>
+                        Событие: <strong>${data.event}</strong><br>
+                        Время: <strong>${data.time}</strong><br>
+                        Дата: <strong>${data.date}</strong>`;
+                    showResult(message, 'success');
+                } else if (data.status === 'unknown') {
+                    console.log('🔍 DEBUG: Обрабатываем неизвестную карту');
+                    const message = `❓ <strong>Неизвестная карта</strong><br>
+                        Серийный номер: <strong>${serial}</strong><br>
+                        Карта не найдена в базе данных сотрудников.`;
+                    showResult(message, 'error');
+                } else {
+                    console.log('🔍 DEBUG: Обрабатываем ошибку сервера');
+                    const message = `❌ <strong>Ошибка сервера:</strong><br>${data.message || 'Неизвестная ошибка'}`;
+                    showResult(message, 'error');
+                }
+            })
+            .catch(error => {
+                console.log('🔍 DEBUG: Попали в catch блок');
+                console.error('🔍 DEBUG: Полная ошибка:', error);
+                console.error('🔍 DEBUG: Ошибка name:', error.name);
+                console.error('🔍 DEBUG: Ошибка message:', error.message);
+                console.error('🔍 DEBUG: Ошибка stack:', error.stack);
+                
+                // Проверяем различные типы ошибок
+                let errorType = 'unknown';
+                if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                    errorType = 'fetch_failed';
+                    console.log('🔍 DEBUG: Тип ошибки: Failed to fetch (вероятно CORS или сеть)');
+                } else if (error.message.includes('CORS')) {
+                    errorType = 'cors';
+                    console.log('🔍 DEBUG: Тип ошибки: CORS');
+                } else if (error.message.includes('Network')) {
+                    errorType = 'network';
+                    console.log('🔍 DEBUG: Тип ошибки: Network');
+                }
+                
+                console.log('🔍 DEBUG: Определенный тип ошибки:', errorType);
+                
+                let errorMessage = `❌ <strong>Ошибка соединения:</strong><br>${error.message}`;
+                
+                if (errorType === 'fetch_failed') {
+                    errorMessage += '<br><br>💡 <em>Скорее всего CORS политика браузера блокирует запрос.</em>';
+                    errorMessage += '<br>💡 <em>Попробуйте использовать curl или Python утилиту.</em>';
+                } else if (error.message.includes('CORS')) {
+                    errorMessage += '<br><br>💡 <em>Возможно, сервер недоступен или заблокирован CORS политикой браузера.</em>';
+                } else if (error.message.includes('fetch')) {
+                    errorMessage += '<br><br>💡 <em>Проверьте, что сервер запущен и доступен по адресу skud-ek.ru</em>';
+                }
+                
+                showResult(errorMessage, 'error');
+            });
+        }
+        
+        function showResult(message, type) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = message;
+            resultDiv.className = 'result ' + type;
+            resultDiv.style.display = 'block';
+            
+            // Прокручиваем к результату
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    </script>
+</body>
+</html> 
