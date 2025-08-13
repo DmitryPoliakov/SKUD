@@ -5,7 +5,7 @@ import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
-from flask import Flask, request, jsonify, render_template, redirect, url_for, send_from_directory
+from flask import Flask, request, jsonify, render_template, redirect, url_for, send_from_directory, flash
 import pandas as pd
 import os
 import json
@@ -14,6 +14,8 @@ import logging
 from logging.handlers import RotatingFileHandler
 import importlib.util
 import calendar
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Создаем экземпляр Flask
 template_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'templates')
@@ -21,6 +23,9 @@ static_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'st
 app = Flask(__name__, 
            template_folder=template_path,
            static_folder=static_path)
+
+# Устанавливаем секретный ключ для flash сообщений
+app.secret_key = 'skud_secret_key_2025'
 
 # Настройка логирования
 logging.basicConfig(
@@ -76,6 +81,28 @@ def save_new_employee(serial, name):
         json.dump(employees, f, ensure_ascii=False, indent=4)
     
     logger.info(f"Добавлен новый сотрудник: {name} с картой {serial}")
+    return True
+
+def delete_employee(serial):
+    """
+    Удаляет сотрудника из списка
+    
+    Args:
+        serial (str): Серийный номер карты для удаления
+    """
+    employees = load_employees()
+    
+    if serial not in employees:
+        logger.warning(f"Попытка удалить несуществующего сотрудника с картой: {serial}")
+        return False
+    
+    employee_name = employees[serial]
+    del employees[serial]
+    
+    with open(EMPLOYEES_FILE, 'w', encoding='utf-8') as f:
+        json.dump(employees, f, ensure_ascii=False, indent=4)
+    
+    logger.info(f"Удален сотрудник: {employee_name} с картой {serial}")
     return True
 
 # Загрузка данных посещаемости
@@ -384,10 +411,17 @@ def add_employee_web():
     name = request.form.get('name', '')
     
     if not serial or not name:
-        return jsonify({'status': 'error', 'message': 'Необходимо указать серийный номер и имя'}), 400
+        flash('Необходимо указать серийный номер и имя', 'error')
+        return redirect(url_for('employees'))
     
-    # Добавляем сотрудника
+    # Проверяем, не существует ли уже сотрудник с таким серийным номером
+    employees = load_employees()
+    if serial in employees:
+        flash(f'Сотрудник с серийным номером {serial} уже существует', 'error')
+        return redirect(url_for('employees'))
+    
     save_new_employee(serial, name)
+    flash(f'Сотрудник {name} с картой {serial} успешно добавлен', 'success')
     
     return redirect(url_for('employees'))
 
@@ -398,10 +432,39 @@ def edit_employee():
     name = request.form.get('name', '')
     
     if not serial or not name:
-        return jsonify({'status': 'error', 'message': 'Необходимо указать серийный номер и имя'}), 400
+        flash('Необходимо указать серийный номер и имя', 'error')
+        return redirect(url_for('employees'))
+    
+    # Проверяем, существует ли сотрудник с таким серийным номером
+    employees = load_employees()
+    if serial not in employees:
+        flash(f'Сотрудник с серийным номером {serial} не найден', 'error')
+        return redirect(url_for('employees'))
     
     # Обновляем имя сотрудника
     save_new_employee(serial, name)
+    flash(f'Данные сотрудника {name} с картой {serial} успешно обновлены', 'success')
+    
+    return redirect(url_for('employees'))
+
+# Маршрут для удаления сотрудника
+@app.route('/delete_employee', methods=['POST'])
+def delete_employee_web():
+    serial = request.form.get('serial', '').upper()
+    if not serial:
+        flash('Необходимо указать серийный номер', 'error')
+        return redirect(url_for('employees'))
+    
+    employees = load_employees()
+    if serial not in employees:
+        flash(f'Сотрудник с серийным номером {serial} не найден', 'error')
+        return redirect(url_for('employees'))
+    
+    employee_name = employees[serial]
+    if delete_employee(serial):
+        flash(f'Сотрудник {employee_name} с картой {serial} успешно удален', 'success')
+    else:
+        flash(f'Ошибка при удалении сотрудника с картой {serial}', 'error')
     
     return redirect(url_for('employees'))
 
@@ -612,14 +675,210 @@ def telegram_reports():
 # Маршрут для генерации отчета
 @app.route('/generate_report', methods=['POST'])
 def generate_report():
-    year = request.form.get('year')
-    month = request.form.get('month')
-    report_type = request.form.get('report_type', 'excel')
-    
-    # Здесь должна быть логика генерации отчета
-    # Для примера, просто перенаправляем на страницу отчетов
-    
-    return redirect(url_for('reports'))
+    try:
+        year = int(request.form.get('year'))
+        month = int(request.form.get('month'))
+        report_type = request.form.get('report_type', 'excel')
+        
+        if not year or not month:
+            flash('Необходимо указать год и месяц', 'error')
+            return redirect(url_for('reports'))
+        
+        logger.info(f"Генерация отчета за {month}/{year}, тип: {report_type}")
+        
+        # Загружаем данные посещаемости
+        df = load_attendance_data()
+        
+        # Преобразуем даты
+        df['date'] = pd.to_datetime(df['date'])
+        
+        # Фильтруем по году и месяцу
+        mask = (df['date'].dt.year == year) & (df['date'].dt.month == month)
+        monthly_data = df[mask].copy()
+        
+        if monthly_data.empty:
+            flash(f'Нет данных за {calendar.month_name[month]} {year}', 'error')
+            return redirect(url_for('reports'))
+        
+        # Преобразуем время в datetime для расчета разницы
+        monthly_data['arrival_time'] = pd.to_datetime(
+            monthly_data['date'].dt.strftime('%Y-%m-%d') + ' ' + monthly_data['arrival']
+        )
+        monthly_data['departure_time'] = pd.to_datetime(
+            monthly_data['date'].dt.strftime('%Y-%m-%d') + ' ' + monthly_data['departure']
+        )
+        
+        # Обрабатываем случаи, когда уход на следующий день
+        mask = monthly_data['departure_time'] < monthly_data['arrival_time']
+        monthly_data.loc[mask, 'departure_time'] = monthly_data.loc[mask, 'departure_time'] + pd.Timedelta(days=1)
+        
+        # Рассчитываем часы работы
+        monthly_data['hours_worked'] = (monthly_data['departure_time'] - monthly_data['arrival_time']).dt.total_seconds() / 3600
+        
+        # Определяем выходные дни (5=суббота, 6=воскресенье)
+        monthly_data['is_weekend'] = monthly_data['date'].dt.dayofweek >= 5
+        
+        # Создаем сводный отчет по сотрудникам
+        summary = monthly_data.groupby('employee').agg(
+            total_days=('date', 'nunique'),
+            total_hours=('hours_worked', 'sum'),
+            avg_hours=('hours_worked', 'mean')
+        ).reset_index()
+        
+        # Создаем сводные цифры по будням и выходным
+        weekend_data = monthly_data[monthly_data['is_weekend'] == True]
+        weekday_data = monthly_data[monthly_data['is_weekend'] == False]
+        
+        weekend_total_hours = weekend_data['hours_worked'].sum() if not weekend_data.empty else 0
+        weekday_total_hours = weekday_data['hours_worked'].sum() if not weekday_data.empty else 0
+        total_hours = monthly_data['hours_worked'].sum()
+        
+        # Создаем Excel-файл
+        month_name = calendar.month_name[month]
+        file_name = f"attendance_report_{year}_{month:02d}_{month_name}.xlsx"
+        reports_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'reports')
+        os.makedirs(reports_dir, exist_ok=True)
+        file_path = os.path.join(reports_dir, file_name)
+        
+        with pd.ExcelWriter(file_path, engine='xlsxwriter') as writer:
+            # Получаем объект workbook
+            workbook = writer.book
+            
+            # Форматы для заголовков
+            header_format = workbook.add_format({
+                'bold': True,
+                'bg_color': '#D9E1F2',
+                'border': 1,
+                'align': 'center'
+            })
+            
+            # Формат для чисел
+            number_format = workbook.add_format({
+                'num_format': '0.0',
+                'border': 1
+            })
+            
+            # Формат для времени
+            time_format = workbook.add_format({
+                'num_format': 'hh:mm',
+                'border': 1
+            })
+            
+            # Формат для даты
+            date_format = workbook.add_format({
+                'num_format': 'yyyy-mm-dd',
+                'border': 1
+            })
+            
+            # Формат для выходных дней
+            weekend_format = workbook.add_format({
+                'bg_color': '#FFCCCC',
+                'border': 1
+            })
+            
+            # 1. Сводный отчет по сотрудникам
+            summary['avg_hours'] = summary['avg_hours'].round(2)
+            summary['total_hours'] = summary['total_hours'].round(2)
+            summary.rename(columns={
+                'employee': 'Сотрудник',
+                'total_days': 'Рабочих дней',
+                'total_hours': 'Всего часов',
+                'avg_hours': 'Средняя продолжительность дня'
+            }, inplace=True)
+            summary.to_excel(writer, sheet_name='Сводный отчет', index=False)
+            
+            # Форматируем сводный отчет
+            summary_sheet = writer.sheets['Сводный отчет']
+            for col_num, value in enumerate(summary.columns.values):
+                summary_sheet.write(0, col_num, value, header_format)
+                summary_sheet.set_column(col_num, col_num, 20)
+            
+            # 2. Детальный отчет с разбивкой по дням
+            detailed = monthly_data[['date', 'employee', 'arrival', 'departure', 'hours_worked', 'is_weekend']].copy()
+            detailed.loc[:, 'date'] = detailed['date'].dt.strftime('%Y-%m-%d')
+            detailed.loc[:, 'hours_worked'] = detailed['hours_worked'].round(2)
+            detailed.rename(columns={
+                'date': 'Дата',
+                'employee': 'Сотрудник',
+                'arrival': 'Приход',
+                'departure': 'Уход',
+                'hours_worked': 'Часов',
+                'is_weekend': 'Выходной'
+            }, inplace=True)
+            detailed.to_excel(writer, sheet_name='Детальный отчет', index=False)
+            
+            # Форматируем детальный отчет
+            detailed_sheet = writer.sheets['Детальный отчет']
+            for col_num, value in enumerate(detailed.columns.values):
+                detailed_sheet.write(0, col_num, value, header_format)
+                detailed_sheet.set_column(col_num, col_num, 15)
+            
+            # Выделяем выходные дни
+            for row_num, is_weekend in enumerate(detailed['Выходной']):
+                if is_weekend:
+                    detailed_sheet.set_row(row_num + 1, None, weekend_format)
+            
+            # 3. Сводные цифры по будням и выходным
+            summary_data = pd.DataFrame({
+                'Показатель': ['Общее вых', 'Общее будни', 'Общий итог'],
+                'Часов': [weekend_total_hours, weekday_total_hours, total_hours]
+            })
+            summary_data['Часов'] = summary_data['Часов'].round(2)
+            summary_data.to_excel(writer, sheet_name='Сводные цифры', index=False)
+            
+            # Форматируем сводные цифры
+            summary_sheet = writer.sheets['Сводные цифры']
+            for col_num, value in enumerate(summary_data.columns.values):
+                summary_sheet.write(0, col_num, value, header_format)
+                summary_sheet.set_column(col_num, col_num, 20)
+            
+            # Применяем формат для колонки с часами
+            summary_sheet.set_column(1, 1, 15, number_format)
+        
+        # Создаем график для визуализации
+        plt.figure(figsize=(12, 8))
+        sns.set_style("whitegrid")
+        
+        # Создаем подграфики
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6))
+        
+        # График 1: Отработанные часы по сотрудникам
+        sns.barplot(x='Сотрудник', y='Всего часов', data=summary, ax=ax1)
+        ax1.set_title(f'Отработанные часы за {month_name} {year}')
+        ax1.set_ylabel('Часы')
+        ax1.set_xlabel('Сотрудник')
+        ax1.tick_params(axis='x', rotation=45)
+        
+        # График 2: Сводные цифры по будням и выходным
+        categories = ['Выходные', 'Будни', 'Общий итог']
+        values = [weekend_total_hours, weekday_total_hours, total_hours]
+        colors = ['#FF6B6B', '#4ECDC4', '#45B7D1']
+        
+        bars = ax2.bar(categories, values, color=colors)
+        ax2.set_title(f'Сводные цифры за {month_name} {year}')
+        ax2.set_ylabel('Часы')
+        
+        # Добавляем значения на столбцы
+        for bar, value in zip(bars, values):
+            height = bar.get_height()
+            ax2.text(bar.get_x() + bar.get_width()/2., height + 0.1,
+                    f'{value:.1f}', ha='center', va='bottom')
+        
+        plt.tight_layout()
+        
+        # Сохраняем график
+        chart_file = os.path.join(reports_dir, f"chart_{year}_{month:02d}.png")
+        plt.savefig(chart_file, dpi=300, bbox_inches='tight')
+        plt.close()
+        
+        logger.info(f"Отчет сгенерирован: {file_path}")
+        flash(f'Отчет за {month_name} {year} успешно сгенерирован', 'success')
+        return redirect(url_for('reports'))
+        
+    except Exception as e:
+        logger.exception(f"Ошибка при генерации отчета: {str(e)}")
+        flash(f'Ошибка при генерации отчета: {str(e)}', 'error')
+        return redirect(url_for('reports'))
 
 # Маршрут для скачивания отчета
 @app.route('/download_report/<filename>')
