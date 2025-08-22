@@ -1,0 +1,361 @@
+{% extends "base.html" %}
+
+{% block title %}Отчеты СКУД - Telegram WebApp{% endblock %}
+
+{% block extra_head %}
+<style>
+/* Специальные стили для Telegram WebApp */
+body {
+    font-size: 14px;
+    margin: 0;
+    padding: 10px;
+}
+
+.container-fluid {
+    padding: 0;
+}
+
+.card {
+    margin-bottom: 15px;
+    border-radius: 8px;
+}
+
+.card-body {
+    padding: 15px;
+}
+
+.btn {
+    border-radius: 6px;
+    font-size: 12px;
+    padding: 6px 12px;
+}
+
+.btn-sm {
+    padding: 4px 8px;
+    font-size: 11px;
+}
+
+/* Для WebApp - делаем кнопки в одну строку с gap */
+.d-flex.gap-2 {
+    gap: 8px !important;
+}
+
+/* Убираем лишние отступы */
+.row {
+    margin: 0;
+}
+
+.col-md-6, .col-md-12 {
+    padding: 5px;
+}
+
+/* Мобильная адаптация */
+@media (max-width: 480px) {
+    .card-title {
+        font-size: 1.5rem;
+    }
+    
+    .btn {
+        font-size: 11px;
+        padding: 5px 8px;
+    }
+    
+    .btn-lg {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1><i class="fas fa-chart-bar"></i> Отчеты СКУД</h1>
+        {% if tg_webapp %}
+        <p class="text-muted">Telegram WebApp - Генерация и просмотр отчетов</p>
+        {% else %}
+        <p class="text-muted">Генерация и просмотр отчетов посещаемости</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Статистика -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card text-white bg-info">
+            <div class="card-header">
+                <i class="fas fa-users"></i> Сегодня присутствуют
+            </div>
+            <div class="card-body">
+                <h2 class="card-title">{{ today_present }}</h2>
+                <p class="card-text">из {{ total_employees }} сотрудников</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card text-white bg-primary">
+            <div class="card-header">
+                <i class="fas fa-percentage"></i> Присутствие
+            </div>
+            <div class="card-body">
+                <h2 class="card-title">{{ "%.0f"|format((today_present / total_employees * 100) if total_employees > 0 else 0) }}%</h2>
+                <p class="card-text">от общего числа</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Генерация отчета -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-file-excel"></i> Генерация отчета
+            </div>
+            <div class="card-body">
+                <form method="POST" action="/generate_report" id="reportForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="year" class="form-label">Год:</label>
+                            <select name="year" id="year" class="form-select" required>
+                                {% for year in available_years %}
+                                <option value="{{ year }}" {% if loop.last %}selected{% endif %}>{{ year }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="month" class="form-label">Месяц:</label>
+                            <select name="month" id="month" class="form-select" required>
+                                {% for month_num, month_name in months.items() %}
+                                <option value="{{ month_num }}">{{ month_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="fas fa-download"></i> Генерировать отчет
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Последние отчеты -->
+{% if recent_reports %}
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-history"></i> Последние отчеты
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    {% for report in recent_reports %}
+                    <div class="list-group-item">
+                        <div class="d-flex flex-column">
+                            <div class="mb-2">
+                                <i class="fas fa-file-excel text-success"></i>
+                                <strong>{{ report.name }}</strong>
+                            </div>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <a href="/download_report/{{ report.filename }}" class="btn btn-sm btn-outline-primary flex-fill">
+                                    <i class="fas fa-download"></i> Скачать
+                                </a>
+                                {% if tg_webapp %}
+                                <button class="btn btn-sm btn-outline-info flex-fill" onclick="viewReport('{{ report.name }}', '/download_report/{{ report.filename }}')">
+                                    <i class="fas fa-paper-plane"></i> Отправить
+                                </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Справка для Telegram WebApp -->
+{% if tg_webapp %}
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card bg-light">
+            <div class="card-body">
+                <h5><i class="fas fa-info-circle"></i> Справка</h5>
+                <ul>
+                    <li><strong>Генерировать отчет</strong> - создает Excel файл и отправляет в чат</li>
+                    <li><strong>Отправить</strong> - отправляет существующий отчет в чат</li>
+                    <li>Отчеты содержат посещаемость, отработанные часы и графики</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+{% if tg_webapp %}
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script>
+// Ждем загрузки SDK и инициализируем WebApp
+function initTelegramWebApp() {
+    console.log('🔍 Checking Telegram WebApp availability...');
+    
+    if (window.Telegram && window.Telegram.WebApp) {
+        const tg = window.Telegram.WebApp;
+        
+        console.log('✅ Telegram WebApp found');
+        console.log('📱 WebApp object:', tg);
+        
+        // Настройка WebApp
+        tg.ready();
+        tg.expand();
+        
+        // Применяем тему Telegram
+        document.body.style.backgroundColor = tg.backgroundColor || '#ffffff';
+        document.body.style.color = tg.textColor || '#000000';
+        
+        console.log('✅ Telegram WebApp initialized');
+        console.log('📱 WebApp size:', tg.viewportHeight, 'x', tg.viewportStableHeight);
+        console.log('📱 Platform:', tg.platform);
+        console.log('📱 Version:', tg.version);
+        
+        // Глобальная переменная для доступа к WebApp
+        window.tgWebApp = tg;
+        
+        return true;
+    } else {
+        console.log('❌ Telegram WebApp not available');
+        return false;
+    }
+}
+
+// Пытаемся инициализировать сразу
+if (!initTelegramWebApp()) {
+    // Если не получилось, ждем загрузки DOM
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('🔄 Retrying WebApp initialization after DOM loaded...');
+        setTimeout(initTelegramWebApp, 100);
+    });
+}
+
+// Telegram WebApp функции
+function viewReport(reportName, reportUrl) {
+    console.log('🔍 viewReport called:', reportName, reportUrl);
+    console.log('🔍 window.tgWebApp exists:', !!window.tgWebApp);
+    console.log('🔍 window.Telegram exists:', !!window.Telegram);
+    
+    if (window.tgWebApp) {
+        const tg = window.tgWebApp;
+        
+        const dataToSend = {
+            action: 'view_report',
+            report_name: reportName,
+            report_url: window.location.origin + reportUrl
+        };
+        
+        console.log('📤 Sending view_report data:', dataToSend);
+        
+        try {
+            // Отправляем данные боту
+            tg.sendData(JSON.stringify(dataToSend));
+            console.log('✅ Data sent successfully');
+            
+            // Показываем пользователю что данные отправлены
+            alert('📤 Данные отправлены боту: ' + reportName);
+            
+            console.log('🔒 Closing WebApp after view_report');
+            setTimeout(() => tg.close(), 1000); // Задержка для показа alert
+        } catch (error) {
+            console.error('❌ Error sending data:', error);
+            alert('❌ Ошибка отправки данных: ' + error.message);
+        }
+    } else {
+        console.log('❌ Telegram WebApp не инициализирован');
+        console.log('🔧 Попробуйте перезагрузить страницу или обратитесь к администратору');
+        alert('Telegram WebApp не инициализирован. Попробуйте перезагрузить страницу.');
+    }
+}
+
+// Обработка формы генерации отчета
+document.getElementById('reportForm').addEventListener('submit', function(e) {
+    console.log('🔍 Form submit triggered');
+    console.log('🔍 window.Telegram exists:', !!window.Telegram);
+    console.log('🔍 window.Telegram.WebApp exists:', !!(window.Telegram && window.Telegram.WebApp));
+    
+    // Проверяем, действительно ли мы в Telegram WebApp
+    const isRealWebApp = window.tgWebApp && 
+                        window.tgWebApp.initData && 
+                        window.tgWebApp.initData.length > 0;
+    
+    console.log('🔍 Real WebApp detected:', isRealWebApp);
+    console.log('🔍 WebApp initData:', window.tgWebApp?.initData);
+    
+    if (isRealWebApp) {
+        console.log('✅ Real WebApp detected, preventing default submit');
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const year = formData.get('year');
+        const month = formData.get('month');
+        
+        const tg = window.tgWebApp;
+        
+        const dataToSend = {
+            action: 'generate_report',
+            year: year,
+            month: month,
+            report_type: 'excel'
+        };
+        
+        console.log('📤 Sending data to bot:', dataToSend);
+        
+        try {
+            // Отправляем данные боту для генерации отчета
+            tg.sendData(JSON.stringify(dataToSend));
+            console.log('✅ Generate report data sent successfully');
+            
+            // Показываем пользователю что данные отправлены
+            alert('📊 Запрос на генерацию отчета отправлен боту!');
+            
+            console.log('🔒 Closing WebApp after generate_report');
+            setTimeout(() => tg.close(), 1000); // Задержка для показа alert
+        } catch (error) {
+            console.error('❌ Error sending generate report data:', error);
+            alert('❌ Ошибка отправки запроса: ' + error.message);
+        }
+    } else {
+        console.log('🌐 Обычный веб-браузер - используется стандартная отправка формы');
+        // Добавляем индикатор загрузки для обычного веба
+        const submitBtn = this.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Генерируется...';
+            submitBtn.disabled = true;
+        }
+        // Форма отправится обычным способом через POST /generate_report
+    }
+});
+
+// Настройка текущего месяца по умолчанию
+document.addEventListener('DOMContentLoaded', function() {
+    const currentMonth = new Date().getMonth() + 1;
+    document.getElementById('month').value = currentMonth;
+});
+</script>
+{% else %}
+<script>
+// Настройка текущего месяца для обычной веб-страницы
+document.addEventListener('DOMContentLoaded', function() {
+    const currentMonth = new Date().getMonth() + 1;
+    document.getElementById('month').value = currentMonth;
+});
+</script>
+{% endif %}
+{% endblock %}

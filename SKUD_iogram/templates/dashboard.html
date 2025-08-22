@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block title %}Панель управления - СКУД{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1><i class="fas fa-tachometer-alt"></i> Панель управления СКУД</h1>
+        <p class="text-muted">Обзор системы контроля доступа</p>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card text-white bg-success">
+            <div class="card-header">
+                <i class="fas fa-user-check"></i> Присутствуют
+            </div>
+            <div class="card-body">
+                <h2 class="card-title">{{ today_present }}</h2>
+                <p class="card-text">Сотрудников на рабочем месте</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card text-white bg-warning">
+            <div class="card-header">
+                <i class="fas fa-user-times"></i> Отсутствуют
+            </div>
+            <div class="card-body">
+                <h2 class="card-title">{{ today_absent }}</h2>
+                <p class="card-text">Сотрудников вне офиса</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-chart-line"></i> Посещаемость за неделю
+            </div>
+            <div class="card-body">
+                <canvas id="weeklyChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-clock"></i> Последние события
+            </div>
+            <div class="card-body">
+                {% if recent_events %}
+                    <div class="list-group list-group-flush">
+                        {% for event in recent_events %}
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>{{ event.employee }}</strong><br>
+                                <small class="text-muted">{{ event.date }}</small>
+                            </div>
+                            <div class="text-end">
+                                <span class="badge bg-{{ 'success' if event.event_type == 'приход' else 'info' }}">
+                                    {{ event.event_type }}
+                                </span><br>
+                                <small>{{ event.time }}</small>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted">Нет событий</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-chart-bar"></i> Среднее время прихода по сотрудникам
+            </div>
+            <div class="card-body">
+                <canvas id="arrivalChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// График посещаемости за неделю
+const weeklyCtx = document.getElementById('weeklyChart').getContext('2d');
+new Chart(weeklyCtx, {
+    type: 'line',
+    data: {
+        labels: {{ weekly_labels | tojson }},
+        datasets: [{
+            label: 'Записей',
+            data: {{ weekly_data | tojson }},
+            borderColor: 'rgb(75, 192, 192)',
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            tension: 0.1
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+// График среднего времени прихода
+const arrivalCtx = document.getElementById('arrivalChart').getContext('2d');
+new Chart(arrivalCtx, {
+    type: 'bar',
+    data: {
+        labels: {{ arrival_labels | tojson }},
+        datasets: [{
+            label: 'Время (часы)',
+            data: {{ arrival_data | tojson }},
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true,
+                max: 12
+            }
+        }
+    }
+});
+</script>
+{% endblock %}

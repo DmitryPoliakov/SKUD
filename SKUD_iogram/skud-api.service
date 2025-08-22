@@ -1,0 +1,15 @@
+[Unit]
+Description=SKUD API Server
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/home/SKUD_iogram
+Environment=PATH=/home/SKUD_iogram/venv/bin
+ExecStart=/home/SKUD_iogram/venv/bin/python api_server.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

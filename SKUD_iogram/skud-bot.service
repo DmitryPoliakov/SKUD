@@ -1,0 +1,26 @@
+[Unit]
+Description=SKUD Telegram Bot (Optimized)
+After=network.target
+Wants=skud-api.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/home/SKUD_iogram
+Environment=PATH=/home/SKUD_iogram/venv/bin
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONPATH=/home/SKUD_iogram
+ExecStart=/home/SKUD_iogram/venv/bin/python start_optimized.py
+Restart=always
+RestartSec=15
+StandardOutput=journal
+StandardError=journal
+KillSignal=SIGTERM
+TimeoutStopSec=30
+
+# Ограничения ресурсов для предотвращения перегрузки CPU
+LimitNOFILE=1024
+MemoryMax=512M
+
+[Install]
+WantedBy=multi-user.target

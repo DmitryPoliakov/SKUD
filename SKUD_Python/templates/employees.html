@@ -85,7 +85,33 @@
                         <label for="edit_name" class="form-label">Имя сотрудника</label>
                         <input type="text" class="form-control" id="edit_name" name="name" required>
                     </div>
-                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                        <button type="button" class="btn btn-danger" id="deleteEmployeeBtn">Удалить сотрудника</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно подтверждения удаления -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Подтверждение удаления</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Вы действительно хотите удалить сотрудника <strong id="deleteEmployeeName"></strong> с картой <strong id="deleteEmployeeSerial"></strong>?</p>
+                <p class="text-danger">Это действие нельзя отменить!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                <form id="deleteEmployeeForm" action="{{ url_for('delete_employee_web') }}" method="post" style="display: inline;">
+                    <input type="hidden" id="delete_serial" name="serial">
+                    <button type="submit" class="btn btn-danger">Удалить</button>
                 </form>
             </div>
         </div>
@@ -109,6 +135,26 @@
                 const editModal = new bootstrap.Modal(document.getElementById('editEmployeeModal'));
                 editModal.show();
             });
+        });
+        
+        // Обработчик для кнопки удаления
+        const deleteEmployeeBtn = document.getElementById('deleteEmployeeBtn');
+        deleteEmployeeBtn.addEventListener('click', function() {
+            const serial = document.getElementById('edit_serial').value;
+            const name = document.getElementById('edit_name').value;
+            
+            // Заполняем модальное окно подтверждения
+            document.getElementById('deleteEmployeeName').textContent = name;
+            document.getElementById('deleteEmployeeSerial').textContent = serial;
+            document.getElementById('delete_serial').value = serial;
+            
+            // Закрываем модальное окно редактирования
+            const editModal = bootstrap.Modal.getInstance(document.getElementById('editEmployeeModal'));
+            editModal.hide();
+            
+            // Показываем модальное окно подтверждения
+            const deleteConfirmModal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
+            deleteConfirmModal.show();
         });
     });
 </script>

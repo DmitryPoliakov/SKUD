@@ -580,3 +580,18 @@ Traceback (most recent call last):
     self._ov.cancel()
     ~~~~~~~~~~~~~~~^^
 OSError: [WinError 6] Неверный дескриптор
+2025-07-25 20:54:15,031 - __main__ - INFO - Запуск сервера СКУД
+2025-07-25 20:54:15,242 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.111:5000
+2025-07-25 20:54:15,243 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-25 20:54:15,245 - werkzeug - INFO -  * Restarting with stat
+2025-07-25 20:54:16,133 - __main__ - INFO - Запуск сервера СКУД
+2025-07-25 20:54:16,158 - werkzeug - WARNING -  * Debugger is active!
+2025-07-25 20:54:16,170 - werkzeug - INFO -  * Debugger PIN: 538-331-360
+2025-07-25 21:04:09,894 - werkzeug - INFO -  * Detected change in 'C:\\Users\\user\\Documents\\project\\SKUD\\SKUD_Python\\app\\main.py', reloading
+2025-07-25 21:04:10,142 - werkzeug - INFO -  * Restarting with stat
+2025-07-25 21:04:11,500 - __main__ - INFO - Запуск сервера СКУД
+2025-07-25 21:04:11,603 - werkzeug - WARNING -  * Debugger is active!
+2025-07-25 21:04:11,608 - werkzeug - INFO -  * Debugger PIN: 538-331-360

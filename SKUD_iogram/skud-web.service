@@ -1,0 +1,23 @@
+[Unit]
+Description=SKUD Web Server
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/home/SKUD_iogram
+Environment=PATH=/home/SKUD_iogram/venv/bin
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONPATH=/home/SKUD_iogram
+ExecStart=/home/SKUD_iogram/venv/bin/python web_server.py
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+# Ограничения ресурсов
+LimitNOFILE=1024
+MemoryMax=1G
+
+[Install]
+WantedBy=multi-user.target

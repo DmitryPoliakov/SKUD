@@ -1,0 +1,13 @@
+# Основные зависимости для СКУД бота на aiogram
+aiogram==3.13.1
+requests==2.31.0
+
+# Flask API для ESP32
+flask==2.3.3
+
+# Для работы с данными (устанавливаем готовые wheel пакеты)
+pandas
+matplotlib
+seaborn
+xlsxwriter
+python-dotenv
