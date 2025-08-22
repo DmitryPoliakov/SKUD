@@ -1,0 +1,61 @@
+# СКУД Enhanced - Система контроля и учета доступа
+# Требования Python 3.9+
+
+# Веб-фреймворк
+Flask==2.3.3
+Flask-CORS==4.0.0
+
+# База данных
+SQLAlchemy==2.0.21
+Alembic==1.12.0
+
+# Telegram Bot (Aiogram)
+aiogram==3.7.0
+aiohttp==3.8.6
+
+# Обработка данных и отчеты
+pandas==2.1.2
+openpyxl==3.1.2
+xlsxwriter==3.1.9
+
+# Графики
+matplotlib==3.8.0
+seaborn==0.13.0
+plotly==5.17.0
+
+# Криптография и безопасность
+cryptography==41.0.7
+PyJWT==2.8.0
+bcrypt==4.0.1
+
+# Утилиты времени
+python-dateutil==2.8.2
+pytz==2023.3
+
+# Валидация данных
+pydantic==2.4.2
+marshmallow==3.20.1
+
+# Планировщик задач
+APScheduler==3.10.4
+
+# Логирование
+loguru==0.7.2
+
+# HTTP клиент
+requests==2.31.0
+
+# Переменные окружения
+python-dotenv==1.0.0
+
+# Тестирование
+pytest==7.4.3
+pytest-asyncio==0.21.1
+
+# Миграции и утилиты
+click==8.1.7
+colorama==0.4.6
+
+# Работа с изображениями (для QR кодов)
+qrcode[pil]==7.4.2
+Pillow==10.0.1 
